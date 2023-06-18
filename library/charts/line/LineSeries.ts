@@ -3,15 +3,29 @@ import {
     LineBasicMaterial,
     Object3D,
     Vector3,
-    Line
+    Line,
+    Color
 } from 'three';
 
-export class LineSeries {
-    constructor(row, dataRow, pointSpace, width) {
-        this._id = dataRow.id.toString();
-        this._row = row;
+import { Series } from '../Series';
 
-        this._linePoints = [];
+import { LinePoint } from './LinePoint';
+
+export class LineSeries extends Series {
+    private _linePoints: Array<LinePoint>;
+
+    private _barWidth: number;
+
+    private _pointSpace: number;
+
+    private _color: Color;
+
+    private _lineWidth: number;
+
+    constructor(index: number, dataRow, pointSpace, width) {
+        super(index, dataRow);
+
+        this._linePoints = new Array<LinePoint>();
 
         this._pointSpace = pointSpace;
         this._color = dataRow.color;
@@ -20,71 +34,67 @@ export class LineSeries {
 
     // ----- Getters
 
-    public get row() {
-        return this._row;
-    };
-
-    public get minX() {
-        var min = null;
+    public get minX(): number {
+        var min = -1;
 
         for (var i=0; i<this._linePoints.length; i++) {
-            var dataValue = this._linePoints[i].getX();
+            var dataValue = this._linePoints[i].x;
 
-            if ((min === null) || (dataValue < min)) min = dataValue;
+            if ((min === -1) || (dataValue < min)) min = dataValue;
         }
 
         return min;
     };
 
-    public get maxX() {
-        var max = null;
+    public get maxX(): number {
+        var max = -1;
 
         for (var i=0; i<this._linePoints.length; i++) {
-            var dataValue = this._linePoints[i].getX();
+            var dataValue = this._linePoints[i].x;
 
-            if ((max === null) || (dataValue > max)) max = dataValue;
+            if ((max === -1) || (dataValue > max)) max = dataValue;
         }
 
         return max;
     };
 
-    public get minY() {
-        var min = null;
+    public get minY(): number {
+        var min = -1;
 
         for (var i=0; i<this._linePoints.length; i++) {
-            var dataValue = this._linePoints[i].getY();
+            var dataValue = this._linePoints[i].y;
 
-            if ((min === null) || (dataValue < min)) min = dataValue;
+            if ((min === -1) || (dataValue < min)) min = dataValue;
         }
 
         return min;
     };
 
-    public get maxY() {
-        var max = null;
+    public get maxY(): number {
+        var max = -1;
 
         for (var i=0; i<this._linePoints.length; i++) {
-            var dataValue = this._linePoints[i].getY();
+            var dataValue = this._linePoints[i].y;
 
-            if ((max === null) || (dataValue > max)) max = dataValue;
+            if ((max === -1) || (dataValue > max)) max = dataValue;
         }
 
         return max;
     };
 
-    public get minZ() {
+    public get minZ(): number {
         return 0;
     };
 
-    public get maxZ() {
+    public get maxZ(): number {
         return 0;
     };
 
-    public get width() {
+    public get width(): number {
         return this.maxX-this.minX;
     };
 
-    public get length() {
+    public get length(): number {
         return this._lineWidth;
     };
 
@@ -100,7 +110,7 @@ export class LineSeries {
         // Generate the outline
         var lineGeometry = new Geometry();
         for (var i=0; i<this._linePoints.length; i++) {
-            lineGeometry.vertices.push(new Vector3(this._linePoints[i].getX(), this._linePoints[i].getY()-graphMinY, (this._lineWidth/2)));
+            lineGeometry.vertices.push(new Vector3(this._linePoints[i].x, this._linePoints[i].y-graphMinY, (this._lineWidth/2)));
         }
 
         var areaLine = new Line(lineGeometry, new LineBasicMaterial({

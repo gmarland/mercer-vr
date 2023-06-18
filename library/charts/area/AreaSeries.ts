@@ -6,15 +6,30 @@ import {
     Face3,
     Vector3,
     Mesh,
-    Line
+    Line,
+    Color,
+    DoubleSide
 } from 'three';
 
-export class AreaSeries {
-    constructor(row, dataRow, pointSpace, width) {
-        this._id = dataRow.id.toString();
-        this._row = row;
+import { Series } from '../Series';
 
-        this._areaPoints = [];
+import { AreaPoint } from './AreaPoint';
+
+export class AreaSeries extends Series {
+    private _areaPoints: Array<AreaPoint>;
+
+    private _barWidth: number;
+
+    private _pointSpace: number;
+
+    private _color: Color;
+
+    private _areaWidth: number;
+
+    constructor(index, dataRow, pointSpace, width) {
+        super(index, dataRow);
+
+        this._areaPoints = new Array<AreaPoint>();
 
         this._pointSpace = pointSpace;
         this._color = dataRow.color;
@@ -23,71 +38,67 @@ export class AreaSeries {
 
     // ----- Getters
 
-    public get row() {
-        return this._row;
-    };
-
-    public get minX() {
-        var min = null;
+    public get minX(): number {
+        var min = -1;
 
         for (var i=0; i<this._areaPoints.length; i++) {
-            var dataValue = this._areaPoints[i].getX();
+            var dataValue = this._areaPoints[i].x;
 
-            if ((min === null) || (dataValue < min)) min = dataValue;
+            if ((min === -1) || (dataValue < min)) min = dataValue;
         }
 
         return min;
     };
 
-    public get maxX() {
-        var max = null;
+    public get maxX(): number {
+        var max = -1;
 
         for (var i=0; i<this._areaPoints.length; i++) {
-            var dataValue = this._areaPoints[i].getX();
+            var dataValue = this._areaPoints[i].x;
 
-            if ((max === null) || (dataValue > max)) max = dataValue;
+            if ((max === -1) || (dataValue > max)) max = dataValue;
         }
 
         return max;
     };
 
-    public get minY() {
-        var min = null;
+    public get minY(): number {
+        var min = -1;
 
         for (var i=0; i<this._areaPoints.length; i++) {
-            var dataValue = this._areaPoints[i].getY();
+            var dataValue = this._areaPoints[i].y;
 
-            if ((min === null) || (dataValue < min)) min = dataValue;
+            if ((min === -1) || (dataValue < min)) min = dataValue;
         }
 
         return min;
     };
 
-    public get maxY() {
-        var max = null;
+    public get maxY(): number {
+        var max = -1;
 
         for (var i=0; i<this._areaPoints.length; i++) {
-            var dataValue = this._areaPoints[i].getY();
+            var dataValue = this._areaPoints[i].y;
 
-            if ((max === null) || (dataValue > max)) max = dataValue;
+            if ((max === -1) || (dataValue > max)) max = dataValue;
         }
 
         return max;
     };
 
-    public get minZ() {
+    public get minZ(): number {
         return 0;
     };
 
-    public get maxZ() {
+    public get maxZ(): number {
         return 0;
     };
 
-    public get width() {
+    public get width(): number {
         return this.maxX-this.minX;
     };
 
-    public get length() {
+    public get length(): number {
         return this._areaWidth;
     };
 
@@ -100,18 +111,18 @@ export class AreaSeries {
     public draw(graphMinX, graphMinY, graphMinZ) {    
         var areaObject = new Object3D();
 
-        var frontVertices = [],
-            backVertices = [];
+        const frontVertices = new Array<Vector3>();
+        const backVertices = new Array<Vector3>();
 
         var areaGeometry = new Geometry();
 
         // create the front verticies
 
         for (var i=0; i<this._areaPoints.length; i++) {
-            frontVertices.push(new Vector3(this._areaPoints[i].getX(), 0, (this._areaWidth/2)));
-            frontVertices.push(new Vector3(this._areaPoints[i].getX(), this._areaPoints[i].getY()-graphMinY, (this._areaWidth/2)));
-            backVertices.push(new Vector3(this._areaPoints[i].getX(), 0, (this._areaWidth/2)*-1));
-            backVertices.push(new Vector3(this._areaPoints[i].getX(), this._areaPoints[i].getY()-graphMinY, (this._areaWidth/2)*-1));
+            frontVertices.push(new Vector3(this._areaPoints[i].x, 0, (this._areaWidth/2)));
+            frontVertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)));
+            backVertices.push(new Vector3(this._areaPoints[i].x, 0, (this._areaWidth/2)*-1));
+            backVertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)*-1));
         }
 
         for (var i=0; i<frontVertices.length; i++) {
@@ -162,7 +173,7 @@ export class AreaSeries {
         // Generate the outline
         var areaLineGeometry = new Geometry();
         for (var i=0; i<this._areaPoints.length; i++) {
-            areaLineGeometry.vertices.push(new Vector3(this._areaPoints[i].getX(), this._areaPoints[i].getY()-graphMinY, (this._areaWidth/2)));
+            areaLineGeometry.vertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)));
         }
 
         var areaLine = new Line(areaLineGeometry, new LineBasicMaterial({

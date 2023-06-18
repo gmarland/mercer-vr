@@ -52,6 +52,8 @@ export class BarChart extends Chart {
                 if (chartConfig.columnLabels.color !== undefined) this._columnLabelColor = new Color(chartConfig.columnLabels.color);
             }
         }
+
+        this.buildSeries(data);
     }
 
     private buildSeries(data) {

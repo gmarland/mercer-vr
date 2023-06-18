@@ -1,14 +1,22 @@
 import { 
     Object3D
 } from 'three';
+import { Series } from '../Series';
+import { Bar } from './Bar';
 
-export class BarSeries {
-    constructor(row, dataRow, columnSpace, width) {
-        this._id = dataRow.id.toString();
+export class BarSeries extends Series {
+    private _bars: Array<Bar>;
 
-        this._row = row;
+    private _barWidth: number;
 
-        this._bars = [];
+    private _columnSpace: number;
+
+    private _barLabels: boolean;
+
+    constructor(index: number, dataRow, columnSpace, width) {
+        super(index, dataRow);
+
+        this._bars = new Array<Bar>();
 
         this._barWidth = width;
 
@@ -18,10 +26,6 @@ export class BarSeries {
     }
 
 // ----- Getters
-
-    public get row() {
-        return this._row;
-    };
 
     public get minX() {
         return 0;
