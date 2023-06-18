@@ -91,11 +91,11 @@ export class Chart {
 
         this._chartObject.add(rowLabelsCollectionObject);
 
-        const columnLabelsCollectionObject = this._seriesCollection.drawColumnLabels();
-        columnLabelsCollectionObject.position.z += (chartLength+(this._baseEdge*2));
-        columnLabelsCollectionObject.position.x += this._baseEdge;
+        const categoryLabelsCollectionObject = this._seriesCollection.drawCategoryLabels();
+        categoryLabelsCollectionObject.position.z += (chartLength+(this._baseEdge*2));
+        categoryLabelsCollectionObject.position.x += this._baseEdge;
 
-        this._chartObject.add(columnLabelsCollectionObject);
+        this._chartObject.add(categoryLabelsCollectionObject);
 
         const chartObjectArea = new Box3().setFromObject(this._chartObject);
 

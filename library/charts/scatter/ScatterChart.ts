@@ -8,7 +8,7 @@ import { ScatterSeries } from "./ScatterSeries";
 import { ScatterPoint } from './ScatterPoint';
 
 export class ScatterChart extends Chart {
-    private pointSize: number = 6; // the space between each column in a row
+    private pointSize: number = 6; // the space between each category in a row
 
     constructor(data, chartConfig) {
         super(chartConfig);

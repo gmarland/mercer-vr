@@ -5,7 +5,7 @@ import {
 import { Chart } from "../Chart";
 import { Bar } from './Bar';
 import { SeriesLabel } from '../../labels/SeriesLabel';
-import { ColumnLabel } from '../../labels/ColumnLabel';
+import { CategoryLabel } from '../../labels/CategoryLabel';
 import { BarSeries } from './BarSeries';
 
 export class BarChart extends Chart {
@@ -17,9 +17,9 @@ export class BarChart extends Chart {
     private _rowSpace = 30; // the space between each row
     private _rowLabelSize = 4; // the font size for the row label
     private _rowLabelColor = 0x000000; // the default color for the row label
-    private _columnSpace = 10; // the space between each column in a row
-    private _columnLabelSize = 4; // the font size for the col label
-    private _columnLabelColor = 0x000000; // the default color for the col label
+    private _categorySpace = 10; // the space between each category in a row
+    private _categoryLabelSize = 4; // the font size for the col label
+    private _categoryLabelColor = 0x000000; // the default color for the col label
     
     constructor(data, chartConfig) {
         super(chartConfig);
@@ -44,12 +44,12 @@ export class BarChart extends Chart {
                 if (chartConfig.rowLabels.color !== undefined) this._rowLabelColor = new Color(chartConfig.rowLabels.color);
             }
 
-            if (chartConfig.columnSpace !== undefined) this._columnSpace = chartConfig.columnSpace;
+            if (chartConfig.categorySpace !== undefined) this._categorySpace = chartConfig.categorySpace;
 
-            if (chartConfig.columnLabels !== undefined) {
-                if (chartConfig.columnLabels.size !== undefined) this._columnLabelSize = chartConfig.columnLabels.size;
+            if (chartConfig.categoryLabels !== undefined) {
+                if (chartConfig.categoryLabels.size !== undefined) this._categoryLabelSize = chartConfig.categoryLabels.size;
 
-                if (chartConfig.columnLabels.color !== undefined) this._columnLabelColor = new Color(chartConfig.columnLabels.color);
+                if (chartConfig.categoryLabels.color !== undefined) this._categoryLabelColor = new Color(chartConfig.categoryLabels.color);
             }
         }
 
@@ -67,13 +67,13 @@ export class BarChart extends Chart {
                 // Local bar settings for labels overwrite global one
                 if (data[i].showBarLabels == undefined) data[i].showBarLabels = this._showBarLabels;
 
-                const row = new BarSeries(i, data[i], this._columnSpace, this._barWidth);
+                const row = new BarSeries(i, data[i], this._categorySpace, this._barWidth);
 
                 for (let j=0; j<data[i].values.length; j++) {
                     const bar = new Bar(j, 
                                     this._barWidth, 
                                     data[i].values[j], 
-                                    this._columnSpace, 
+                                    this._categorySpace, 
                                     data[i].color, 
                                     this._barOpacity,
                                     data[i].showBarLabels, 
@@ -92,10 +92,10 @@ export class BarChart extends Chart {
                 }
             }
 
-            for (let i=0; i<data.columnLabels.values.length; i++) {
-                const columnLabel = new ColumnLabel(i, this._columnSpace, this._barWidth, this._columnLabelSize, this._columnLabelColor, data.columnLabels.values[i]);
+            for (let i=0; i<data.categoryLabels.values.length; i++) {
+                const categoryLabel = new CategoryLabel(i, this._categorySpace, this._barWidth, this._categoryLabelSize, this._categoryLabelColor, data.categoryLabels.values[i]);
 
-                this.seriesCollection.addColumnLabel(columnLabel);
+                this.seriesCollection.addCategoryLabel(categoryLabel);
             }
         }
     }

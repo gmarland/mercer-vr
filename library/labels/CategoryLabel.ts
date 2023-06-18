@@ -7,18 +7,17 @@ import {
 
 import { Label } from './Label';
 
-export class ColumnLabel extends Label {
-    private _column;
+export class CategoryLabel extends Label {
+    private _category;
 
-    constructor(column, columnSpace, columnWidth, size, color, text) {
-        super(columnSpace, columnWidth, size, color, text);
+    constructor(category, categorySpace, categoryWidth, size, color, text) {
+        super(categorySpace, categoryWidth, size, color, text);
 
-        this._column = column;
+        this._category = category;
     };
 
     public draw(): void {
         const textGeometry = new TextGeometry(this.text, {
-            font: _font,
             size: this.size,
             height: .2
         });
@@ -35,7 +34,7 @@ export class ColumnLabel extends Label {
         const textBoxArea = new Box3().setFromObject(textMesh);
 
         textMesh.position.z = (3 + textBoxArea.size().z);
-        textMesh.position.x = ((this._column*this.space) + (this._column*this.width) + (this.width/2) + (textBoxArea.size().x/2));
+        textMesh.position.x = ((this._category*this.space) + (this._category*this.width) + (this.width/2) + (textBoxArea.size().x/2));
 
         return textMesh;
     }

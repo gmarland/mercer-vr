@@ -14,12 +14,12 @@ import {
 } from 'three';
 
 export class Bar {
-    private _column;
+    private _category;
     private _barWidth;
     private _color;
     private _opacity;
     private _dataValue;
-    private _columnSpace;
+    private _categorySpace;
     private _showLabels;
     private _labelSize;
     private _labelColor;
@@ -28,13 +28,13 @@ export class Bar {
 
     private _barObject: Object3D = null;
 
-    constructor(column, barWidth, dataValue, columnSpace, color, opacity, showLabels, labelSize, labelColor) {
-        this._column = column;
+    constructor(category, barWidth, dataValue, categorySpace, color, opacity, showLabels, labelSize, labelColor) {
+        this._category = category;
         this._barWidth = barWidth;
         this._color = color;
         this._opacity = opacity;
         this._dataValue = dataValue;
-        this._columnSpace = columnSpace;
+        this._categorySpace = categorySpace;
         this._showLabels = showLabels;
         this._labelSize = labelSize;
         this._labelColor = labelColor;
@@ -64,7 +64,7 @@ export class Bar {
         this._barObject = new Object3D();
 
         // Calculate the bar geometry
-        const xPos = ((this._column*this._columnSpace) + (this._column*barWidth)) + (barWidth/2);
+        const xPos = ((this._category*this._categorySpace) + (this._category*barWidth)) + (barWidth/2);
 
         this._height = (this._dataValue-graphMinY);
 

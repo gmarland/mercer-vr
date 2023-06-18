@@ -7,7 +7,7 @@ export class SeriesCollection {
 
     private _allSeries = [];
     private _seriesLabels = [];
-    private _columnLabels = [];
+    private _categoryLabels = [];
     
     constructor(seriesSpace) {``
         this._seriesSpace = seriesSpace;
@@ -134,8 +134,8 @@ export class SeriesCollection {
         this._seriesLabels.push(seriesLabel);
     }
 
-    public addColumnLabel(columnLabel) {
-        this._columnLabels.push(columnLabel);
+    public addCategoryLabel(categoryLabel) {
+        this._categoryLabels.push(categoryLabel);
     }
 
     public drawAllSeries(graphMinY, graphMaxY) {
@@ -162,13 +162,13 @@ export class SeriesCollection {
         return seriesLabelObjects;
     }
 
-    public drawColumnLabels() {
-        const columnLabelObjects = new Object3D();
+    public drawCategoryLabels() {
+        const categoryLabelObjects = new Object3D();
 
-        for (const i=0; i<this._columnLabels.length; i++) {
-            columnLabelObjects.add(this._columnLabels[i].draw());
+        for (const i=0; i<this._categoryLabels.length; i++) {
+            categoryLabelObjects.add(this._categoryLabels[i].draw());
         }
 
-        return columnLabelObjects;
+        return categoryLabelObjects;
     }
 }

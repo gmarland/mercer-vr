@@ -9,18 +9,18 @@ export class BarSeries extends Series {
 
     private _barWidth: number;
 
-    private _columnSpace: number;
+    private _categorySpace: number;
 
     private _barLabels: boolean;
 
-    constructor(index: number, dataRow, columnSpace, width) {
+    constructor(index: number, dataRow, categorySpace, width) {
         super(index, dataRow);
 
         this._bars = new Array<Bar>();
 
         this._barWidth = width;
 
-        this._columnSpace = columnSpace;
+        this._categorySpace = categorySpace;
 
         this._barLabels = dataRow.showBarLabels;
     }
@@ -73,7 +73,7 @@ export class BarSeries extends Series {
         for (let i=0; i<this._bars.length; i++) {
             totalWidth += this._barWidth;
 
-            if (i != (this._bars.length-1)) totalWidth += this._columnSpace;
+            if (i != (this._bars.length-1)) totalWidth += this._categorySpace;
         }
 
         return totalWidth;
