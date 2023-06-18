@@ -79,13 +79,13 @@ export class Chart {
         this._chartObject.add(this._baseMesh);
         if (this._measurementLines) this._chartObject.add(this._measurementLines);
 
-        var rowCollectionObject = this._seriesCollection.drawRows(minChartRangeY, maxChartRangeY);
+        var rowCollectionObject = this._seriesCollection.drawAllSeries(minChartRangeY, maxChartRangeY);
         rowCollectionObject.position.x += this._baseEdge;
         rowCollectionObject.position.z += this._baseEdge;
 
         this._chartObject.add(rowCollectionObject);
 
-        var rowLabelsCollectionObject = this._seriesCollection.drawRowLabels();
+        var rowLabelsCollectionObject = this._seriesCollection.drawSeriesLabels();
         rowLabelsCollectionObject.position.z += this._baseEdge;
         rowLabelsCollectionObject.position.x += (chartWidth+(this._baseEdge*2));
 

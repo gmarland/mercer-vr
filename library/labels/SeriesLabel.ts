@@ -18,7 +18,6 @@ export class SeriesLabel extends Label {
 
     public draw(): Mesh {
         var textGeometry = new TextGeometry(this.text, {
-            font: _font,
             size: this.size,
             height: .2
         });

@@ -6,24 +6,24 @@ import { Chart } from "../Chart";
 
 import { SeriesCollection } from "../SeriesCollection";
 
-import { AreaSeries } from "./AreaSeries";
-import { AreaPoint } from "./AreaPoint";
+import { LineSeries } from "./LineSeries";
+import { LinePoint } from "./LinePoint";
 
 import { SeriesLabel } from '../../labels/SeriesLabel';
 
-export class AreaChart extends Chart {
-    private areaWidth: number = 4; // the width of the area graph
+export class LineChart extends Chart {
+    private lineWidth: number = 2.5; // the width of the lines on the graph
     private rowSpace: number = 30; // the space between each row
     private rowLabelSize: number = 4; // the font size for the row label
-    private rowLabelColor: number = 0x000000; // the default color for the row label
+    private rowLabelColor: Color = 0x000000; // the default color for the row label
     private pointSpace: number = 5; // the space between each column in a row
 
     constructor(data, chartConfig) {
         super(chartConfig);
-
+        
         // Allow the override using the graphData options if they exist
         if (chartConfig !== undefined) {
-            if (chartConfig.areaWidth !== undefined) this.areaWidth = chartConfig.areaWidth;
+            if (chartConfig.lineWidth !== undefined) this.lineWidth = chartConfig.lineWidth;
             
             if (chartConfig.rowSpace !== undefined) this.rowSpace = chartConfig.rowSpace;
 
@@ -35,14 +35,9 @@ export class AreaChart extends Chart {
 
             if (chartConfig.pointSpace !== undefined) this.pointSpace = chartConfig.pointSpace;
         }
-
-        this.buildSeries(data);
     }
-     
-    private buildSeries(data): void {
-        this.seriesCollection = new SeriesCollection(this.rowSpace);
 
-        // check that we've have some data passed in
+    private buildSeries(data) {
         if (data) {
             for (var i=0; i<data.length; i++) {
                 if (data[i].id == undefined) data[i].id = i.toString();
@@ -50,24 +45,24 @@ export class AreaChart extends Chart {
                 if (data[i].color !== undefined) data[i].color = new Color(data[i].color);
                 else data[i].color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
 
-                var series = new AreaSeries(i, data[i], this.pointSpace, this.areaWidth);
+                var series = new LineSeries(i, data[i], this.pointSpace, this.lineWidth);
 
                 data[i].values.sort(function(a,b) {
                     return a.x > b.x ? 1 : a.x < b.x ? -1 : 0;
                 });
 
                 for (var j=0; j<data[i].values.length; j++) {
-                    var areaPoint = new AreaPoint(data[i].values[j].x, data[i].values[j].y);
+                    var linePoint = new LinePoint(data[i].values[j].x, data[i].values[j].y);
 
-                    series.addAreaPoint(areaPoint);
+                    series.addLinePoint(linePoint);
                 }
 
                 this.seriesCollection.addSeries(series);
 
                 if (data[i].title) {
-                    var seriesLabel = new SeriesLabel(i, this.rowSpace, this.areaWidth, this.rowLabelSize, this.rowLabelColor, data[i].title);
+                    var rowLabel = new SeriesLabel(i, this.rowSpace, this.lineWidth, this.rowLabelSize, this.rowLabelColor, data[i].title);
 
-                    this.seriesCollection.addSeriesLabel(seriesLabel);
+                    this.seriesCollection.addSeriesLabel(rowLabel);
                 }
             }
         }
