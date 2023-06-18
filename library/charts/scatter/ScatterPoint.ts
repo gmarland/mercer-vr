@@ -25,7 +25,7 @@ export class ScatterPoint extends Point {
     }
     
     public draw(color): void {
-        var pointGeometry = new SphereGeometry(this._pointSize, 100, 100),
+        const pointGeometry = new SphereGeometry(this._pointSize, 100, 100),
             pointMaterial = new MeshLambertMaterial({
                 color: color,
                 side: DoubleSide, 
@@ -33,7 +33,7 @@ export class ScatterPoint extends Point {
                 opacity: 0.8
             });
 
-        var pointMesh = new Mesh(pointGeometry, pointMaterial)
+        const pointMesh = new Mesh(pointGeometry, pointMaterial)
 
         pointMesh.position.x = this.x;
         pointMesh.position.y = this.y;

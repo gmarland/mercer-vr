@@ -68,7 +68,7 @@ export class Bar {
 
         this._height = (this._dataValue-graphMinY);
 
-        var barGeometry = new Geometry();
+        const barGeometry = new Geometry();
         barGeometry.dynamic = true;
 
         // Plot the verticies
@@ -95,7 +95,7 @@ export class Bar {
 
         barGeometry.computeFaceNormals();
 
-        var barMesh = new Mesh(barGeometry, new MeshLambertMaterial({
+        const barMesh = new Mesh(barGeometry, new MeshLambertMaterial({
             color: this._color, 
             side: DoubleSide,
             transparent: true,
@@ -105,7 +105,7 @@ export class Bar {
 
         this._barObject.add(barMesh);
 
-        var barOutline = new Object3D();
+        const barOutline = new Object3D();
         barOutline.name = "outline";
 
         // Generate the outlines
@@ -118,16 +118,16 @@ export class Bar {
         this._barObject.add(barOutline);
 
         if (this._showLabels) {
-            var valueGeometry = new TextGeometry(this._dataValue, {
+            const valueGeometry = new TextGeometry(this._dataValue, {
                 size: this._labelSize,
                 height: .2
             });
             
-            var valueMesh = new Mesh(valueGeometry, new MeshBasicMaterial({
+            const valueMesh = new Mesh(valueGeometry, new MeshBasicMaterial({
                 color: this._labelColor
             }));
 
-            var valueArea = new Box3().setFromObject(valueMesh);
+            const valueArea = new Box3().setFromObject(valueMesh);
 
             valueMesh.position.x = xPos-(valueArea.size().x/2);
             valueMesh.position.y = this._height + 2;
@@ -142,7 +142,7 @@ export class Bar {
     // ----- Private Methods
 
     private getBarVertices(xPos, zPos, height, width): Array<Vector3> {
-        var vertices = new Array<Vector3>();
+        const vertices = new Array<Vector3>();
 
         vertices.push(new Vector3(xPos-(width/2), 0, zPos-(width/2)));
         vertices.push(new Vector3(xPos-(width/2), 0, zPos+(width/2)));
@@ -160,7 +160,7 @@ export class Bar {
     }
 
     private getLineGeometry(type, xPos, zPos, height, width): Array<Vector3> {
-        var vertices = new Array<Vector3>();
+        const vertices = new Array<Vector3>();
 
         switch(type) {
             case "front":
@@ -193,10 +193,10 @@ export class Bar {
     };
 
     private getOutlineMesh(type, xPos, zPos, height, width, color) {
-        var outlineGeometry = new Geometry();
+        const outlineGeometry = new Geometry();
         outlineGeometry.vertices = this.getLineGeometry(type, xPos, zPos, height, width);
 
-        var outline = new Line(outlineGeometry, new LineBasicMaterial({
+        const outline = new Line(outlineGeometry, new LineBasicMaterial({
             color: color
         }));
 

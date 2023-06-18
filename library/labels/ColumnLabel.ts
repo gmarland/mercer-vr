@@ -17,13 +17,13 @@ export class ColumnLabel extends Label {
     };
 
     public draw(): void {
-        var textGeometry = new TextGeometry(this.text, {
+        const textGeometry = new TextGeometry(this.text, {
             font: _font,
             size: this.size,
             height: .2
         });
 
-        var textMaterial = new MeshBasicMaterial({
+        const textMaterial = new MeshBasicMaterial({
             color: this.color
         });
         
@@ -32,7 +32,7 @@ export class ColumnLabel extends Label {
         textMesh.rotation.x = (Math.PI/2)*-1;
         textMesh.rotation.z += (Math.PI/2);
 
-        var textBoxArea = new Box3().setFromObject(textMesh);
+        const textBoxArea = new Box3().setFromObject(textMesh);
 
         textMesh.position.z = (3 + textBoxArea.size().z);
         textMesh.position.x = ((this._column*this.space) + (this._column*this.width) + (this.width/2) + (textBoxArea.size().x/2));

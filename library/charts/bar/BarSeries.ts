@@ -36,10 +36,10 @@ export class BarSeries extends Series {
     };
 
     public get minY() {
-        var min = null;
+        let min = null;
 
-        for (var i=0; i<this._bars.length; i++) {
-            var dataValue = this._bars[i].getDataValue();
+        for (let i=0; i<this._bars.length; i++) {
+            const dataValue = this._bars[i].getDataValue();
 
             if ((min === null) || (dataValue < min)) min = dataValue;
         }
@@ -48,10 +48,10 @@ export class BarSeries extends Series {
     };
 
     public get maxY() {
-        var max = null;
+        let max = null;
 
-        for (var i=0; i<this._bars.length; i++) {
-            var dataValue = this._bars[i].getDataValue();
+        for (let i=0; i<this._bars.length; i++) {
+            const dataValue = this._bars[i].getDataValue();
 
             if ((max === null) || (dataValue > max)) max = dataValue;
         }
@@ -68,9 +68,9 @@ export class BarSeries extends Series {
     };
 
     public get width() {
-        var totalWidth = 0;
+        let totalWidth = 0;
 
-        for (var i=0; i<this._bars.length; i++) {
+        for (let i=0; i<this._bars.length; i++) {
             totalWidth += this._barWidth;
 
             if (i != (this._bars.length-1)) totalWidth += this._columnSpace;
@@ -80,10 +80,10 @@ export class BarSeries extends Series {
     };
 
     public get length() {
-        var maxLength = 0;
+        let maxLength = 0;
 
-        for (var i=0; i<this._bars.length; i++) {
-            var barWidth = this._barWidth;
+        for (let i=0; i<this._bars.length; i++) {
+            const barWidth = this._barWidth;
 
             if (barWidth > maxLength) maxLength = barWidth;
         }
@@ -92,10 +92,10 @@ export class BarSeries extends Series {
     };
 
     public get height() {
-        var maxHeight = 0;
+        let maxHeight = 0;
 
-        for (var i=0; i<this._bars.length; i++) {
-            var height = this._bars[i].getHeight();
+        for (let i=0; i<this._bars.length; i++) {
+            const height = this._bars[i].getHeight();
 
             if (height > maxHeight) maxHeight = height;
         }
@@ -110,9 +110,9 @@ export class BarSeries extends Series {
     }
 
     public draw(graphMinX, graphMinY, graphMinZ) {
-        var barObjects = new Object3D();
+        const barObjects = new Object3D();
 
-        for (var i=0; i<this._bars.length; i++) {
+        for (let i=0; i<this._bars.length; i++) {
             barObjects.add(this._bars[i].draw(graphMinY, this._barWidth));
         }
 

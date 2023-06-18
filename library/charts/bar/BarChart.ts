@@ -58,7 +58,7 @@ export class BarChart extends Chart {
 
     private buildSeries(data) {
         if (data) {
-            for (var i=0; i<data.length; i++) {
+            for (let i=0; i<data.length; i++) {
                 if (data[i].id == undefined) data[i].id = i.toString();
 
                 if (data[i].color !== undefined) data[i].color = new Color(data[i].color);
@@ -67,10 +67,10 @@ export class BarChart extends Chart {
                 // Local bar settings for labels overwrite global one
                 if (data[i].showBarLabels == undefined) data[i].showBarLabels = this._showBarLabels;
 
-                var row = new BarSeries(i, data[i], this._columnSpace, this._barWidth);
+                const row = new BarSeries(i, data[i], this._columnSpace, this._barWidth);
 
-                for (var j=0; j<data[i].values.length; j++) {
-                    var bar = new Bar(j, 
+                for (let j=0; j<data[i].values.length; j++) {
+                    const bar = new Bar(j, 
                                     this._barWidth, 
                                     data[i].values[j], 
                                     this._columnSpace, 
@@ -86,14 +86,14 @@ export class BarChart extends Chart {
                 this.seriesCollection.addSeries(row);
 
                 if (data[i].title) {
-                    var seriesLabel = new SeriesLabel(i, this._rowSpace, this._barWidth, this._rowLabelSize, this._rowLabelColor, data[i].title);
+                    const seriesLabel = new SeriesLabel(i, this._rowSpace, this._barWidth, this._rowLabelSize, this._rowLabelColor, data[i].title);
 
                     this.seriesCollection.addSeriesLabel(seriesLabel);
                 }
             }
 
-            for (var i=0; i<data.columnLabels.values.length; i++) {
-                var columnLabel = new ColumnLabel(i, this._columnSpace, this._barWidth, this._columnLabelSize, this._columnLabelColor, data.columnLabels.values[i]);
+            for (let i=0; i<data.columnLabels.values.length; i++) {
+                const columnLabel = new ColumnLabel(i, this._columnSpace, this._barWidth, this._columnLabelSize, this._columnLabelColor, data.columnLabels.values[i]);
 
                 this.seriesCollection.addColumnLabel(columnLabel);
             }

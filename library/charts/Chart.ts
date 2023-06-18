@@ -67,7 +67,7 @@ export class Chart {
         let minChartRangeY = (minValueY - minValueY %  rangeStepY);
         if (minChartRangeY != 0) minChartRangeY -= rangeStepY;
 
-        var maxChartRangeY = (rangeStepY - maxValueY % rangeStepY) + maxValueY;
+        const maxChartRangeY = (rangeStepY - maxValueY % rangeStepY) + maxValueY;
 
         const chartWidth = this._seriesCollection.width;
         const chartLength = this._seriesCollection.length;
@@ -79,25 +79,25 @@ export class Chart {
         this._chartObject.add(this._baseMesh);
         if (this._measurementLines) this._chartObject.add(this._measurementLines);
 
-        var rowCollectionObject = this._seriesCollection.drawAllSeries(minChartRangeY, maxChartRangeY);
+        const rowCollectionObject = this._seriesCollection.drawAllSeries(minChartRangeY, maxChartRangeY);
         rowCollectionObject.position.x += this._baseEdge;
         rowCollectionObject.position.z += this._baseEdge;
 
         this._chartObject.add(rowCollectionObject);
 
-        var rowLabelsCollectionObject = this._seriesCollection.drawSeriesLabels();
+        const rowLabelsCollectionObject = this._seriesCollection.drawSeriesLabels();
         rowLabelsCollectionObject.position.z += this._baseEdge;
         rowLabelsCollectionObject.position.x += (chartWidth+(this._baseEdge*2));
 
         this._chartObject.add(rowLabelsCollectionObject);
 
-        var columnLabelsCollectionObject = this._seriesCollection.drawColumnLabels();
+        const columnLabelsCollectionObject = this._seriesCollection.drawColumnLabels();
         columnLabelsCollectionObject.position.z += (chartLength+(this._baseEdge*2));
         columnLabelsCollectionObject.position.x += this._baseEdge;
 
         this._chartObject.add(columnLabelsCollectionObject);
 
-        var chartObjectArea = new Box3().setFromObject(this._chartObject);
+        const chartObjectArea = new Box3().setFromObject(this._chartObject);
 
         // position the object so it will view well
         this._chartObject.position.x = ((chartObjectArea.size().x/2)*-1);
@@ -114,16 +114,16 @@ export class Chart {
     }
 
     private drawBase(chartWidth, chartLength, baseEdge, baseThickness, baseColor): void {
-        var baseWidth = chartWidth+(baseEdge*2),
+        const baseWidth = chartWidth+(baseEdge*2),
             baseLength = chartLength+(baseEdge*2);
 
-        var baseGeometry = new BoxGeometry(baseWidth, baseThickness, baseLength),
+        const baseGeometry = new BoxGeometry(baseWidth, baseThickness, baseLength),
             baseMaterial = new MeshLambertMaterial({
                 color: baseColor, 
                 side: DoubleSide
             });
 
-        var baseMesh = new Mesh(baseGeometry, baseMaterial);
+        const baseMesh = new Mesh(baseGeometry, baseMaterial);
         baseMesh.position.x = (baseWidth/2);
         baseMesh.position.y -= ((baseThickness/2)+0.1);
         baseMesh.position.z = (baseLength/2);
@@ -132,34 +132,34 @@ export class Chart {
     }
 
     private drawMeasurementsLines(chartWidth, chartLength, chartHeight, numberOfMeasurementLines, lineColor, labelSize, labelColor, minValue, maxValue): void {
-        var measurementLineObject = new Object3D();
+        const measurementLineObject = new Object3D();
 
-        var stepsEachLine = Math.ceil(chartHeight/numberOfMeasurementLines);
+        const stepsEachLine = Math.ceil(chartHeight/numberOfMeasurementLines);
 
-        for (var i=1; i<=numberOfMeasurementLines; i++) {
-            var measureLineGeometry = new Geometry();
+        for (let i=1; i<=numberOfMeasurementLines; i++) {
+            const measureLineGeometry = new Geometry();
             measureLineGeometry.vertices.push(new Vector3((chartWidth/2)*-1, (stepsEachLine*i), (chartLength/2)));
             measureLineGeometry.vertices.push(new Vector3((chartWidth/2)*-1, (stepsEachLine*i), (chartLength/2)*-1));
             measureLineGeometry.vertices.push(new Vector3((chartWidth/2), (stepsEachLine*i), (chartLength/2)*-1));
 
-            var measureLine = new Line(measureLineGeometry, new LineBasicMaterial({
+            const measureLine = new Line(measureLineGeometry, new LineBasicMaterial({
                 color: lineColor,
                 side: DoubleSide
             }));
 
             measurementLineObject.add(measureLine);
 
-            var textGeometry = new TextGeometry((minValue+Math.round((maxValue-minValue)/numberOfMeasurementLines)*i).toString(), {
+            const textGeometry = new TextGeometry((minValue+Math.round((maxValue-minValue)/numberOfMeasurementLines)*i).toString(), {
                 font: this._font,
                 size: labelSize,
                 height: .2
             });
             
-            var textMesh = new Mesh(textGeometry, new MeshBasicMaterial({
+            const textMesh = new Mesh(textGeometry, new MeshBasicMaterial({
                 color: labelColor
             }));
 
-            var textBoxArea = new Box3().setFromObject(textMesh);
+            const textBoxArea = new Box3().setFromObject(textMesh);
 
             textMesh.position.x += ((chartWidth/2)+5);
             textMesh.position.y += ((stepsEachLine*i)-(textBoxArea.size().y/2));

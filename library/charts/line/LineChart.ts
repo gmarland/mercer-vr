@@ -39,20 +39,20 @@ export class LineChart extends Chart {
 
     private buildSeries(data) {
         if (data) {
-            for (var i=0; i<data.length; i++) {
+            for (let i=0; i<data.length; i++) {
                 if (data[i].id == undefined) data[i].id = i.toString();
 
                 if (data[i].color !== undefined) data[i].color = new Color(data[i].color);
                 else data[i].color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
 
-                var series = new LineSeries(i, data[i], this.pointSpace, this.lineWidth);
+                const series = new LineSeries(i, data[i], this.pointSpace, this.lineWidth);
 
                 data[i].values.sort(function(a,b) {
                     return a.x > b.x ? 1 : a.x < b.x ? -1 : 0;
                 });
 
-                for (var j=0; j<data[i].values.length; j++) {
-                    var linePoint = new LinePoint(data[i].values[j].x, data[i].values[j].y);
+                for (let j=0; j<data[i].values.length; j++) {
+                    const linePoint = new LinePoint(data[i].values[j].x, data[i].values[j].y);
 
                     series.addLinePoint(linePoint);
                 }
@@ -60,7 +60,7 @@ export class LineChart extends Chart {
                 this.seriesCollection.addSeries(series);
 
                 if (data[i].title) {
-                    var rowLabel = new SeriesLabel(i, this.rowSpace, this.lineWidth, this.rowLabelSize, this.rowLabelColor, data[i].title);
+                    const rowLabel = new SeriesLabel(i, this.rowSpace, this.lineWidth, this.rowLabelSize, this.rowLabelColor, data[i].title);
 
                     this.seriesCollection.addSeriesLabel(rowLabel);
                 }

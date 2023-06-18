@@ -35,10 +35,10 @@ export class LineSeries extends Series {
     // ----- Getters
 
     public get minX(): number {
-        var min = -1;
+        let min = -1;
 
-        for (var i=0; i<this._linePoints.length; i++) {
-            var dataValue = this._linePoints[i].x;
+        for (let i=0; i<this._linePoints.length; i++) {
+            const dataValue = this._linePoints[i].x;
 
             if ((min === -1) || (dataValue < min)) min = dataValue;
         }
@@ -47,10 +47,10 @@ export class LineSeries extends Series {
     };
 
     public get maxX(): number {
-        var max = -1;
+        let max = -1;
 
-        for (var i=0; i<this._linePoints.length; i++) {
-            var dataValue = this._linePoints[i].x;
+        for (let i=0; i<this._linePoints.length; i++) {
+            const dataValue = this._linePoints[i].x;
 
             if ((max === -1) || (dataValue > max)) max = dataValue;
         }
@@ -59,10 +59,10 @@ export class LineSeries extends Series {
     };
 
     public get minY(): number {
-        var min = -1;
+        let min = -1;
 
-        for (var i=0; i<this._linePoints.length; i++) {
-            var dataValue = this._linePoints[i].y;
+        for (let i=0; i<this._linePoints.length; i++) {
+            const dataValue = this._linePoints[i].y;
 
             if ((min === -1) || (dataValue < min)) min = dataValue;
         }
@@ -71,10 +71,10 @@ export class LineSeries extends Series {
     };
 
     public get maxY(): number {
-        var max = -1;
+        let max = -1;
 
-        for (var i=0; i<this._linePoints.length; i++) {
-            var dataValue = this._linePoints[i].y;
+        for (let i=0; i<this._linePoints.length; i++) {
+            const dataValue = this._linePoints[i].y;
 
             if ((max === -1) || (dataValue > max)) max = dataValue;
         }
@@ -105,15 +105,15 @@ export class LineSeries extends Series {
     }
 
     draw(graphMinX, graphMinY, graphMinZ) {    
-        var lineObject = new Object3D();
+        const lineObject = new Object3D();
 
         // Generate the outline
-        var lineGeometry = new Geometry();
-        for (var i=0; i<this._linePoints.length; i++) {
+        const lineGeometry = new Geometry();
+        for (let i=0; i<this._linePoints.length; i++) {
             lineGeometry.vertices.push(new Vector3(this._linePoints[i].x, this._linePoints[i].y-graphMinY, (this._lineWidth/2)));
         }
 
-        var areaLine = new Line(lineGeometry, new LineBasicMaterial({
+        const areaLine = new Line(lineGeometry, new LineBasicMaterial({
             color: this._color
         }));
 

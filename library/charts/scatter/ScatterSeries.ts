@@ -19,10 +19,10 @@ export class ScatterSeries {
     };
 
     public get minX() {
-        var min = null;
+        const min = null;
 
-        for (var i=0; i<this._scatterPoints.length; i++) {
-            var dataValue = this._scatterPoints[i].getX();
+        for (const i=0; i<this._scatterPoints.length; i++) {
+            const dataValue = this._scatterPoints[i].getX();
 
             if ((min === null) || (dataValue < min)) min = dataValue;
         }
@@ -31,10 +31,10 @@ export class ScatterSeries {
     };
 
     public get maxX() {
-        var max = null;
+        const max = null;
 
-        for (var i=0; i<this._scatterPoints.length; i++) {
-            var dataValue = this._scatterPoints[i].getX();
+        for (const i=0; i<this._scatterPoints.length; i++) {
+            const dataValue = this._scatterPoints[i].getX();
 
             if ((max === null) || (dataValue > max)) max = dataValue;
         }
@@ -43,10 +43,10 @@ export class ScatterSeries {
     };
 
     public get MinY() {
-        var min = null;
+        const min = null;
 
-        for (var i=0; i<this._scatterPoints.length; i++) {
-            var dataValue = this._scatterPoints[i].getY();
+        for (const i=0; i<this._scatterPoints.length; i++) {
+            const dataValue = this._scatterPoints[i].getY();
 
             if ((min === null) || (dataValue < min)) min = dataValue;
         }
@@ -55,10 +55,10 @@ export class ScatterSeries {
     };
 
     public get maxY() {
-        var max = null;
+        const max = null;
 
-        for (var i=0; i<this._scatterPoints.length; i++) {
-            var dataValue = this._scatterPoints[i].getY();
+        for (const i=0; i<this._scatterPoints.length; i++) {
+            const dataValue = this._scatterPoints[i].getY();
 
             if ((max === null) || (dataValue > max)) max = dataValue;
         }
@@ -67,10 +67,10 @@ export class ScatterSeries {
     };
 
     public get minZ() {
-        var min = null;
+        const min = null;
 
-        for (var i=0; i<this._scatterPoints.length; i++) {
-            var dataValue = this._scatterPoints[i].getZ();
+        for (const i=0; i<this._scatterPoints.length; i++) {
+            const dataValue = this._scatterPoints[i].getZ();
 
             if ((min === null) || (dataValue < min)) min = dataValue;
         }
@@ -79,10 +79,10 @@ export class ScatterSeries {
     };
 
     public get maxZ() {
-        var max = null;
+        const max = null;
 
-        for (var i=0; i<this._scatterPoints.length; i++) {
-            var dataValue = this._scatterPoints[i].getZ();
+        for (const i=0; i<this._scatterPoints.length; i++) {
+            const dataValue = this._scatterPoints[i].getZ();
 
             if ((max === null) || (dataValue > max)) max = dataValue;
         }
@@ -105,9 +105,9 @@ export class ScatterSeries {
     }
 
     public draw(graphMinX, graphMinY, graphMinZ) {    
-        var rowObject = new Object3D();
+        const rowObject = new Object3D();
 
-        for (var i=0; i<this._scatterPoints.length; i++) {
+        for (const i=0; i<this._scatterPoints.length; i++) {
             rowObject.add(this._scatterPoints[i].draw(this._color));
         }
 

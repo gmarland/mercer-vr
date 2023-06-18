@@ -39,10 +39,10 @@ export class AreaSeries extends Series {
     // ----- Getters
 
     public get minX(): number {
-        var min = -1;
+        let min = -1;
 
-        for (var i=0; i<this._areaPoints.length; i++) {
-            var dataValue = this._areaPoints[i].x;
+        for (let i=0; i<this._areaPoints.length; i++) {
+            const dataValue = this._areaPoints[i].x;
 
             if ((min === -1) || (dataValue < min)) min = dataValue;
         }
@@ -51,10 +51,10 @@ export class AreaSeries extends Series {
     };
 
     public get maxX(): number {
-        var max = -1;
+        let max = -1;
 
-        for (var i=0; i<this._areaPoints.length; i++) {
-            var dataValue = this._areaPoints[i].x;
+        for (let i=0; i<this._areaPoints.length; i++) {
+            const dataValue = this._areaPoints[i].x;
 
             if ((max === -1) || (dataValue > max)) max = dataValue;
         }
@@ -63,10 +63,10 @@ export class AreaSeries extends Series {
     };
 
     public get minY(): number {
-        var min = -1;
+        let min = -1;
 
-        for (var i=0; i<this._areaPoints.length; i++) {
-            var dataValue = this._areaPoints[i].y;
+        for (let i=0; i<this._areaPoints.length; i++) {
+            const dataValue = this._areaPoints[i].y;
 
             if ((min === -1) || (dataValue < min)) min = dataValue;
         }
@@ -75,10 +75,10 @@ export class AreaSeries extends Series {
     };
 
     public get maxY(): number {
-        var max = -1;
+        let max = -1;
 
-        for (var i=0; i<this._areaPoints.length; i++) {
-            var dataValue = this._areaPoints[i].y;
+        for (let i=0; i<this._areaPoints.length; i++) {
+            const dataValue = this._areaPoints[i].y;
 
             if ((max === -1) || (dataValue > max)) max = dataValue;
         }
@@ -109,38 +109,38 @@ export class AreaSeries extends Series {
     }
 
     public draw(graphMinX, graphMinY, graphMinZ) {    
-        var areaObject = new Object3D();
+        const areaObject = new Object3D();
 
         const frontVertices = new Array<Vector3>();
         const backVertices = new Array<Vector3>();
 
-        var areaGeometry = new Geometry();
+        const areaGeometry = new Geometry();
 
         // create the front verticies
 
-        for (var i=0; i<this._areaPoints.length; i++) {
+        for (let i=0; i<this._areaPoints.length; i++) {
             frontVertices.push(new Vector3(this._areaPoints[i].x, 0, (this._areaWidth/2)));
             frontVertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)));
             backVertices.push(new Vector3(this._areaPoints[i].x, 0, (this._areaWidth/2)*-1));
             backVertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)*-1));
         }
 
-        for (var i=0; i<frontVertices.length; i++) {
+        for (let i=0; i<frontVertices.length; i++) {
             areaGeometry.vertices.push(frontVertices[i]);
         }
 
-        for (var i=0; i<backVertices.length; i++) {
+        for (let i=0; i<backVertices.length; i++) {
             areaGeometry.vertices.push(backVertices[i]);
         }
 
         // Add the front face
-        for (var i=0; i<frontVertices.length-2; i+=2) {
+        for (let i=0; i<frontVertices.length-2; i+=2) {
             areaGeometry.faces.push( new Face3( i, (i+1), (i+3) ) );
             areaGeometry.faces.push( new Face3( i, (i+2), (i+3) ) );
         }
 
         // Add the back face
-        for (var i=frontVertices.length; i<(frontVertices.length+backVertices.length)-2; i+=2) {
+        for (let i=frontVertices.length; i<(frontVertices.length+backVertices.length)-2; i+=2) {
             areaGeometry.faces.push( new Face3( i, (i+1), (i+3) ) );
             areaGeometry.faces.push( new Face3( i, (i+2), (i+3) ) );
         }
@@ -150,7 +150,7 @@ export class AreaSeries extends Series {
         areaGeometry.faces.push( new Face3( 0, 1, (frontVertices.length+1) ) );
 
         // Add the joining face
-        for (var i=0; i<frontVertices.length-2; i+=2) {
+        for (let i=0; i<frontVertices.length-2; i+=2) {
             areaGeometry.faces.push( new Face3( (i+1), (i+3), (i+(frontVertices.length+3)) ) );
             areaGeometry.faces.push( new Face3( (i+1), (i+(frontVertices.length+1)), (i+(frontVertices.length+3)) ) );
         }
@@ -161,7 +161,7 @@ export class AreaSeries extends Series {
 
         areaGeometry.computeFaceNormals();
 
-        var areaMesh = new Mesh(areaGeometry, new MeshLambertMaterial({
+        const areaMesh = new Mesh(areaGeometry, new MeshLambertMaterial({
             color: this._color, 
             side: DoubleSide,
             transparent: true,
@@ -171,12 +171,12 @@ export class AreaSeries extends Series {
         areaObject.add(areaMesh);
 
         // Generate the outline
-        var areaLineGeometry = new Geometry();
-        for (var i=0; i<this._areaPoints.length; i++) {
+        const areaLineGeometry = new Geometry();
+        for (let i=0; i<this._areaPoints.length; i++) {
             areaLineGeometry.vertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)));
         }
 
-        var areaLine = new Line(areaLineGeometry, new LineBasicMaterial({
+        const areaLine = new Line(areaLineGeometry, new LineBasicMaterial({
             color: this._color
         }));
 

@@ -17,12 +17,12 @@ export class SeriesLabel extends Label {
     }
 
     public draw(): Mesh {
-        var textGeometry = new TextGeometry(this.text, {
+        const textGeometry = new TextGeometry(this.text, {
             size: this.size,
             height: .2
         });
         
-        var textMaterial = new MeshBasicMaterial({
+        const textMaterial = new MeshBasicMaterial({
             color: this.color
         });
 
@@ -30,7 +30,7 @@ export class SeriesLabel extends Label {
 
         textMesh.rotation.x = (Math.PI/2)*-1;
 
-        var textBoxArea = new Box3().setFromObject(textMesh);
+        const textBoxArea = new Box3().setFromObject(textMesh);
 
         textMesh.position.x = 3;
         textMesh.position.z = ((this._row*this.space) + (this._row*this.width) + (this.width/2) + (textBoxArea.size().z/2));
