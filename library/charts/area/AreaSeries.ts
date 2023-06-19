@@ -110,11 +110,11 @@ export class AreaSeries extends Series {
 
     // ----- Public Methods
 
-    public addAreaPoint(areaPoint) {
+    public addAreaPoint(areaPoint: AreaPoint) {
         this._areaPoints.push(areaPoint);
     }
 
-    public draw(graphMinX, graphMinY, graphMinZ) {    
+    public draw(graphMinX: number, graphMinY: number, graphMinZ: number) {    
         const areaObject = new Object3D();
 
         const frontVertices = new Array<Vector3>();

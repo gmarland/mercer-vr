@@ -56,7 +56,7 @@ export class BarChart extends Chart {
         this.buildSeries(data);
     }
 
-    private buildSeries(data) {
+    private buildSeries(data): void {
         if (data) {
             for (let i=0; i<data.length; i++) {
                 if (data[i].id == undefined) data[i].id = i.toString();

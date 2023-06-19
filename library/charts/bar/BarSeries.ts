@@ -14,7 +14,7 @@ export class BarSeries extends Series {
 
     private _barLabels: boolean;
 
-    constructor(index: number, seriesData: ISeriesData, categorySpace, width) {
+    constructor(index: number, seriesData: ISeriesData, categorySpace, width: number) {
         super(index, seriesData);
 
         this._bars = new Array<Bar>();
@@ -28,11 +28,11 @@ export class BarSeries extends Series {
 
 // ----- Getters
 
-    public get minX() {
+    public get minX(): number | null {
         return 0;
     };
 
-    public get maxX() {
+    public get maxX(): number | null {
         return 0;
     };
 
@@ -48,7 +48,7 @@ export class BarSeries extends Series {
         return min;
     };
 
-    public get maxY() {
+    public get maxY(): number | null {
         let max = null;
 
         for (let i=0; i<this._bars.length; i++) {
@@ -60,15 +60,15 @@ export class BarSeries extends Series {
         return max;
     };
 
-    public get minZ() {
+    public get minZ(): number | null {
         return 0;
     };
 
-    public get maxZ() {
+    public get maxZ(): number | null {
         return 0;
     };
 
-    public get width() {
+    public get width(): number {
         let totalWidth = 0;
 
         for (let i=0; i<this._bars.length; i++) {
@@ -80,7 +80,7 @@ export class BarSeries extends Series {
         return totalWidth;
     };
 
-    public get length() {
+    public get length(): number {
         let maxLength = 0;
 
         for (let i=0; i<this._bars.length; i++) {
@@ -92,7 +92,7 @@ export class BarSeries extends Series {
         return maxLength;
     };
 
-    public get height() {
+    public get height(): number {
         let maxHeight = 0;
 
         for (let i=0; i<this._bars.length; i++) {
@@ -106,11 +106,11 @@ export class BarSeries extends Series {
 
 // ----- Public Methods
 
-    public addBar(bar) {
+    public addBar(bar: Bar): void {
         this._bars.push(bar);
     }
 
-    public draw(graphMinX, graphMinY, graphMinZ) {
+    public draw(graphMinX: number, graphMinY: number, graphMinZ: number): void {
         const barObjects = new Object3D();
 
         for (let i=0; i<this._bars.length; i++) {

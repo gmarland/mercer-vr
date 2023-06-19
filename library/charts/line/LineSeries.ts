@@ -111,7 +111,7 @@ export class LineSeries extends Series {
         this._linePoints.push(linePoint);
     }
 
-    draw(graphMinX, graphMinY, graphMinZ) {    
+    draw(graphMinX: number, graphMinY: number, graphMinZ: number) {    
         const lineObject = new Object3D();
 
         // Generate the outline

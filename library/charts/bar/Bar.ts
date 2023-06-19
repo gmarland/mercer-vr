@@ -10,7 +10,8 @@ import {
     MeshLambertMaterial,
     Box3,
     Object3D,
-    DoubleSide
+    DoubleSide,
+    Color
 } from 'three';
 
 export class Bar {
@@ -60,7 +61,7 @@ export class Bar {
 
     // ----- Public Methods
 
-    public draw(graphMinY, barWidth) {
+    public draw(graphMinY: number, barWidth: number) {
         this._barObject = new Object3D();
 
         // Calculate the bar geometry
@@ -141,7 +142,7 @@ export class Bar {
 
     // ----- Private Methods
 
-    private getBarVertices(xPos, zPos, height, width): Array<Vector3> {
+    private getBarVertices(xPos: number, zPos: number, height: number, width: number): Array<Vector3> {
         const vertices = new Array<Vector3>();
 
         vertices.push(new Vector3(xPos-(width/2), 0, zPos-(width/2)));
@@ -159,7 +160,7 @@ export class Bar {
         return vertices;
     }
 
-    private getLineGeometry(type, xPos, zPos, height, width): Array<Vector3> {
+    private getLineGeometry(type: string, xPos: number, zPos: number, height: number, width: number): Array<Vector3> {
         const vertices = new Array<Vector3>();
 
         switch(type) {
@@ -192,7 +193,7 @@ export class Bar {
         return vertices;
     };
 
-    private getOutlineMesh(type, xPos, zPos, height, width, color) {
+    private getOutlineMesh(type: string, xPos: number, zPos: number, height: number, width: number, color: Color) {
         const outlineGeometry = new Geometry();
         outlineGeometry.vertices = this.getLineGeometry(type, xPos, zPos, height, width);
 
