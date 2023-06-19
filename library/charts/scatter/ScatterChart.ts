@@ -7,15 +7,16 @@ import { Chart } from "../Chart";
 import { ScatterSeries } from "./ScatterSeries";
 import { ScatterPoint } from './ScatterPoint';
 import { IScatterSeriesData } from './IScatterSeriesData';
+import { IScatterConfig } from './IScatterConfig';
 
 export class ScatterChart extends Chart {
     private pointSize: number = 6; // the space between each category in a row
 
-    constructor(data: Array<IScatterSeriesData>, chartConfig) {
+    constructor(data: Array<IScatterSeriesData>, chartConfig?: IScatterConfig) {
         super(chartConfig);
 
-        if (chartConfig !== undefined) {
-            if (chartConfig.pointSize !== undefined) this.pointSize = chartConfig.pointSize;
+        if (chartConfig) {
+            if (chartConfig.pointSize) this.pointSize = chartConfig.pointSize;
         }
 
         this.buildSeries(data);

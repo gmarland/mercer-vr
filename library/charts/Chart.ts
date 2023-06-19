@@ -16,6 +16,8 @@ import {
 
 import { SeriesCollection } from './SeriesCollection';
 
+import { IChartConfig } from './IChartConfig';
+
 import { NumberUtils } from '../utils/numberUtils';
 
 export class Chart {
@@ -39,7 +41,7 @@ export class Chart {
     private _baseMesh: Mesh;
     private _measurementLines: Object3D = null;
 
-    constructor(chartConfig?) {
+    constructor(chartConfig?: IChartConfig) {
         this._chartObject = new Object3D();
 
         if (chartConfig) {        

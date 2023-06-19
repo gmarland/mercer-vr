@@ -9,6 +9,7 @@ import { LinePoint } from "./LinePoint";
 
 import { SeriesLabel } from '../../labels/SeriesLabel';
 import { ILineSeriesData } from './ILineSeriesData';
+import { ILineConfig } from './ILineConfig';
 
 export class LineChart extends Chart {
     private lineWidth: number = 2.5; // the width of the lines on the graph
@@ -17,7 +18,7 @@ export class LineChart extends Chart {
     private rowLabelColor: Color = 0x000000; // the default color for the row label
     private pointSpace: number = 5; // the space between each category in a row
 
-    constructor(data: Array<ILineSeriesData>, chartConfig) {
+    constructor(data: Array<ILineSeriesData>, chartConfig?: ILineConfig) {
         super(chartConfig);
         
         // Allow the override using the graphData options if they exist
@@ -26,11 +27,9 @@ export class LineChart extends Chart {
             
             if (chartConfig.rowSpace !== undefined) this.rowSpace = chartConfig.rowSpace;
 
-            if (chartConfig.rowLabels !== undefined) {
-                if (chartConfig.rowLabels.size !== undefined) this.rowLabelSize = chartConfig.rowLabels.size;
+            if (chartConfig.rowLabelSize !== undefined) this.rowLabelSize = chartConfig.rowLabelSize;
 
-                if (chartConfig.rowLabels.color !== undefined) this.rowLabelColor = new Color(chartConfig.rowLabels.color);
-            }
+            if (chartConfig.rowLabelColor !== undefined) this.rowLabelColor = new Color(chartConfig.rowLabelColor);
 
             if (chartConfig.pointSpace !== undefined) this.pointSpace = chartConfig.pointSpace;
         }
