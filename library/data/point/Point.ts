@@ -1,4 +1,6 @@
-export class Point {
+import { IPoint } from "./IPoint";
+
+export class Point implements IPoint {
     private _x: number;
     private _y: number;
 

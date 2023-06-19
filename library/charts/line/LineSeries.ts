@@ -44,7 +44,7 @@ export class LineSeries extends Series {
         }
 
         return min;
-    };
+    }
 
     public get maxX(): number {
         let max = -1;
@@ -56,7 +56,7 @@ export class LineSeries extends Series {
         }
 
         return max;
-    };
+    }
 
     public get minY(): number {
         let min = -1;
@@ -68,7 +68,7 @@ export class LineSeries extends Series {
         }
 
         return min;
-    };
+    }
 
     public get maxY(): number {
         let max = -1;
@@ -80,23 +80,23 @@ export class LineSeries extends Series {
         }
 
         return max;
-    };
+    }
 
     public get minZ(): number {
         return 0;
-    };
+    }
 
     public get maxZ(): number {
         return 0;
-    };
+    }
 
     public get width(): number {
         return this.maxX-this.minX;
-    };
+    }
 
     public get length(): number {
         return this._lineWidth;
-    };
+    }
 
     // ----- Public Methods
 

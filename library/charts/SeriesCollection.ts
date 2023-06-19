@@ -1,24 +1,34 @@
 import { 
     Object3D
 } from 'three';
+import { Series } from './Series';
+
+import { SeriesLabel } from '../labels/SeriesLabel';
+import { CategoryLabel } from '../labels/CategoryLabel';
 
 export class SeriesCollection {
     private _seriesSpace;
 
-    private _allSeries = [];
-    private _seriesLabels = [];
-    private _categoryLabels = [];
+    private _allSeries: Array<Series>;
+
+    private _seriesLabels: Array<SeriesLabel>;
+    private _categoryLabels: Array<CategoryLabel>;
     
-    constructor(seriesSpace) {``
+    constructor(seriesSpace) {
         this._seriesSpace = seriesSpace;
+
+        this._allSeries = new Array<Series>();
+        
+        this._seriesLabels = new Array<SeriesLabel>();
+        this._categoryLabels = new Array<CategoryLabel>();
     }
 
     // ----- Getters
 
     public get minX() {
-        const min = 0;
+        let min = 0;
 
-        for (const i=0; i<this._allSeries.length; i++) {
+        for (let i=0; i<this._allSeries.length; i++) {
             const minValue = this._allSeries[i].minX;
 
             if ((min === null) || (minValue < min)) min = minValue;
@@ -28,9 +38,9 @@ export class SeriesCollection {
     }
 
     public get maxX() {
-        const max = 0;
+        let max = 0;
 
-        for (const i=0; i<this._allSeries.length; i++) {
+        for (let i=0; i<this._allSeries.length; i++) {
             const maxValue = this._allSeries[i].maxX;
 
             if ((max === null) || (maxValue > max)) max = maxValue;
@@ -40,9 +50,9 @@ export class SeriesCollection {
     }
 
     public get minY() {
-        const min = 0;
+        let min = 0;
 
-        for (const i=0; i<this._allSeries.length; i++) {
+        for (let i=0; i<this._allSeries.length; i++) {
             const minValue = this._allSeries[i].minY;
 
             if ((min === null) || (minValue < min)) min = minValue;
@@ -52,9 +62,9 @@ export class SeriesCollection {
     }
 
     public get maxY() {
-        const max = 0;
+        let max = 0;
 
-        for (const i=0; i<this._allSeries.length; i++) {
+        for (let i=0; i<this._allSeries.length; i++) {
             const maxValue = this._allSeries[i].maxY;
 
             if ((max === null) || (maxValue > max)) max = maxValue;
@@ -64,9 +74,9 @@ export class SeriesCollection {
     }
 
     public get minZ() {
-        const min = 0;
+        let min = 0;
 
-        for (const i=0; i<this._allSeries.length; i++) {
+        for (let i=0; i<this._allSeries.length; i++) {
             const minValue = this._allSeries[i].minZ;
 
             if ((min === null) || (minValue < min)) min = minValue;
@@ -76,9 +86,9 @@ export class SeriesCollection {
     }
 
     public get maxZ() {
-        const max = 0;
+        let max = 0;
 
-        for (const i=0; i<this._allSeries.length; i++) {
+        for (let i=0; i<this._allSeries.length; i++) {
             const maxValue = this._allSeries[i].maxZ;
 
             if ((max === null) || (maxValue > max)) max = maxValue;
@@ -88,9 +98,9 @@ export class SeriesCollection {
     }
 
     public get width() {
-        const maxWidth = 0;
+        let maxWidth = 0;
 
-        for (const i=0; i<this._allSeries.length; i++) {
+        for (let i=0; i<this._allSeries.length; i++) {
             const seriesWidth = this._allSeries[i].width;
 
             if (seriesWidth > maxWidth) maxWidth = seriesWidth;
@@ -101,9 +111,9 @@ export class SeriesCollection {
 
     public get length() {
         if (this._seriesSpace) {
-            const totalLength = 0;
+            let totalLength = 0;
 
-            for (const i=0; i<this._allSeries.length; i++) {
+            for (let i=0; i<this._allSeries.length; i++) {
                 totalLength += this._allSeries[i].length;
 
                 if (i != (this._allSeries.length-1)) totalLength += this._seriesSpace;
@@ -112,9 +122,9 @@ export class SeriesCollection {
             return totalLength;
         }
         else {
-            const maxLength = 0;
+            let maxLength = 0;
 
-            for (const i=0; i<this._allSeries.length; i++) {
+            for (let i=0; i<this._allSeries.length; i++) {
                 const seriesLength = this._allSeries[i].length;
 
                 if (seriesLength > maxLength) maxLength = seriesLength;
@@ -126,7 +136,7 @@ export class SeriesCollection {
 
     // ----- Public Methods
 
-    public addSeries(series) {
+    public addSeries(series: Series) {
         this._allSeries.push(series);
     }
 
@@ -141,10 +151,10 @@ export class SeriesCollection {
     public drawAllSeries(graphMinY, graphMaxY) {
         const collectionObjects = new Object3D();
 
-        for (const i=0; i<this._allSeries.length; i++) {
-            const series = this._allSeries[i].draw(this.getMinX(), graphMinY, this.getMinZ());
+        for (let i=0; i<this._allSeries.length; i++) {
+            const series = this._allSeries[i].draw(this.minX, graphMinY, this.minZ);
 
-            if (this._seriesSpace) series.position.z += ((this._allSeries[i].getSeries()*this._seriesSpace) + (this._allSeries[i].getSeries()*this._allSeries[i].getLength())) + (this._allSeries[i].getLength()/2);
+            if (this._seriesSpace) series.position.z += ((this._allSeries[i].index*this._seriesSpace) + (this._allSeries[i].index*this._allSeries[i].length)) + (this._allSeries[i].length/2);
 
             collectionObjects.add(series);
         }
@@ -155,7 +165,7 @@ export class SeriesCollection {
     public drawSeriesLabels() {
         const seriesLabelObjects = new Object3D();
 
-        for (const i=0; i<this._seriesLabels.length; i++) {
+        for (let i=0; i<this._seriesLabels.length; i++) {
             seriesLabelObjects.add(this._seriesLabels[i].draw());
         }
 
@@ -165,7 +175,7 @@ export class SeriesCollection {
     public drawCategoryLabels() {
         const categoryLabelObjects = new Object3D();
 
-        for (const i=0; i<this._categoryLabels.length; i++) {
+        for (let i=0; i<this._categoryLabels.length; i++) {
             categoryLabelObjects.add(this._categoryLabels[i].draw());
         }
 

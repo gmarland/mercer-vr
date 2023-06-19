@@ -3,6 +3,7 @@ import {
 } from 'three';
 import { Series } from '../Series';
 import { Bar } from './Bar';
+import { ISeriesData } from '../../data/series/ISeriesData';
 
 export class BarSeries extends Series {
     private _bars: Array<Bar>;
@@ -13,8 +14,8 @@ export class BarSeries extends Series {
 
     private _barLabels: boolean;
 
-    constructor(index: number, dataRow, categorySpace, width) {
-        super(index, dataRow);
+    constructor(index: number, seriesData: ISeriesData, categorySpace, width) {
+        super(index, seriesData);
 
         this._bars = new Array<Bar>();
 
@@ -22,7 +23,7 @@ export class BarSeries extends Series {
 
         this._categorySpace = categorySpace;
 
-        this._barLabels = dataRow.showBarLabels;
+        this._barLabels = false;
     }
 
 // ----- Getters
