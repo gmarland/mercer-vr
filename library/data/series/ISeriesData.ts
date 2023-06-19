@@ -2,6 +2,8 @@ import { IPoint } from "../point/IPoint";
 
 export interface ISeriesData {
     name: string;
+    
+    color?: string
 
-    data: Array<IPoint>;
+    values: Array<IPoint>;
 }

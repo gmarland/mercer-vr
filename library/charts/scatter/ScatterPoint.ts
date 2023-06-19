@@ -5,15 +5,29 @@ import {
     Mesh
 } from 'three';
 
-import { Point } from "../Point";
+import { Point } from "../../data/point/Point";
 
-export class ScatterPoint extends Point {
+export class ScatterPoint {
+    private _x: number;
+    private _y: number;
     private _z: number;
     
     private _pointSize: number;
 
     constructor(x: number, y: number, z: number, pointSize: number) {
-        super(x, y)
+        this._x = x;
+        this._y = y;
+        this._z = z;
+        
+        this._pointSize = pointSize;
+    }
+
+    public get x(): number {
+        return this._x;
+    }
+
+    public get y(): number {
+        return this._y;
     }
 
     public get z(): number {

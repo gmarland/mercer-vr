@@ -34,17 +34,17 @@ export abstract class Series {
 
     // ----- Getters
 
-    public abstract get minX(): number;
+    public abstract get minX(): number | null;
 
-    public abstract get maxX(): number;
+    public abstract get maxX(): number | null;
 
-    public abstract get minY(): number;
+    public abstract get minY(): number | null;
 
-    public abstract get maxY(): number;
+    public abstract get maxY(): number | null;
 
-    public abstract get minZ(): number;
+    public abstract get minZ(): number | null;
 
-    public abstract get maxZ(): number;
+    public abstract get maxZ(): number | null;
 
     public abstract get width(): number;
 

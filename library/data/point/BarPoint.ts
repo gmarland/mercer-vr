@@ -1,17 +1,7 @@
-export class BarPoint {
-    private _name: string;
-    private _value: number;
+import { IPoint } from "./IPoint";
 
-    constructor(name: string, value: number) {
-        this._name = name;
-        this._value = value;
-    }
+export interface BarPoint extends IPoint {
+    name: string;
 
-    public get name(): string {
-        return this._name;
-    }
-
-    public get value(): number {
-        return this._value;
-    }
+    value: number;
 }

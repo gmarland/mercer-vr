@@ -31,7 +31,7 @@ export class SeriesCollection {
         for (let i=0; i<this._allSeries.length; i++) {
             const minValue = this._allSeries[i].minX;
 
-            if ((min === null) || (minValue < min)) min = minValue;
+            if (minValue && ((min === null) || (minValue < min))) min = minValue;
         }
 
         return min;
@@ -43,7 +43,7 @@ export class SeriesCollection {
         for (let i=0; i<this._allSeries.length; i++) {
             const maxValue = this._allSeries[i].maxX;
 
-            if ((max === null) || (maxValue > max)) max = maxValue;
+            if (maxValue && ((max === null) || (maxValue > max))) max = maxValue;
         }
 
         return max;
@@ -55,7 +55,7 @@ export class SeriesCollection {
         for (let i=0; i<this._allSeries.length; i++) {
             const minValue = this._allSeries[i].minY;
 
-            if ((min === null) || (minValue < min)) min = minValue;
+            if (minValue && ((min === null) || (minValue < min))) min = minValue;
         }
 
         return min;
@@ -67,7 +67,7 @@ export class SeriesCollection {
         for (let i=0; i<this._allSeries.length; i++) {
             const maxValue = this._allSeries[i].maxY;
 
-            if ((max === null) || (maxValue > max)) max = maxValue;
+            if (maxValue && ((max === null) || (maxValue > max))) max = maxValue;
         }
 
         return max;
@@ -79,7 +79,7 @@ export class SeriesCollection {
         for (let i=0; i<this._allSeries.length; i++) {
             const minValue = this._allSeries[i].minZ;
 
-            if ((min === null) || (minValue < min)) min = minValue;
+            if (minValue && ((min === null) || (minValue < min))) min = minValue;
         }
 
         return min;
@@ -91,7 +91,7 @@ export class SeriesCollection {
         for (let i=0; i<this._allSeries.length; i++) {
             const maxValue = this._allSeries[i].maxZ;
 
-            if ((max === null) || (maxValue > max)) max = maxValue;
+            if (maxValue && ((max === null) || (maxValue > max))) max = maxValue;
         }
 
         return max;

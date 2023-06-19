@@ -1,14 +1,13 @@
 import { IPoint } from "./IPoint";
 
-export class ThreeDPoint implements IPoint {
+export class ThreeDPoint {
     private _x: number;
     private _y: number;
     private _z: number;
 
-    constructor(x: number, y: number, z: number) {
+    constructor(x: number, y: number) {
         this._x = x;
         this._y = y;
-        this._z = z;
     }
 
     public get x(): number {
@@ -20,6 +19,6 @@ export class ThreeDPoint implements IPoint {
     }
 
     public get z(): number {
-        return this._z;
+        return this._y;
     }
 }

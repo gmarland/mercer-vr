@@ -6,7 +6,7 @@ export class NumberUtils {
             return 1;
         }
         else {
-            const multiplier = 0;
+            let multiplier = 0;
 
             while (true) {
                 if ((diff >= Math.pow(10, multiplier)) && (diff < Math.pow(10, multiplier+1))) return Math.pow(10, (multiplier));

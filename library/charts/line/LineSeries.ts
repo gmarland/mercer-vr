@@ -10,6 +10,7 @@ import {
 import { Series } from '../Series';
 
 import { LinePoint } from './LinePoint';
+import { ISeriesData } from '../../data/series/ISeriesData';
 
 export class LineSeries extends Series {
     private _linePoints: Array<LinePoint>;
@@ -22,76 +23,82 @@ export class LineSeries extends Series {
 
     private _lineWidth: number;
 
-    constructor(index: number, dataRow, pointSpace, width) {
-        super(index, dataRow);
+    constructor(index: number, seriesData: ISeriesData, color: Color, pointSpace: number, width: number) {
+        super(index, seriesData);
 
         this._linePoints = new Array<LinePoint>();
 
+        this._color = color;
+
         this._pointSpace = pointSpace;
-        this._color = dataRow.color;
+        this._color = color;
         this._lineWidth = width;
     }
 
     // ----- Getters
 
-    public get minX(): number {
-        let min = -1;
+    public get minX(): number | null {
+        let min: number | null = null;
 
         for (let i=0; i<this._linePoints.length; i++) {
             const dataValue = this._linePoints[i].x;
 
-            if ((min === -1) || (dataValue < min)) min = dataValue;
+            if ((min === null) || (dataValue < min)) min = dataValue;
         }
 
         return min;
     }
 
-    public get maxX(): number {
-        let max = -1;
+    public get maxX(): number | null {
+        let max: number | null = null;
 
         for (let i=0; i<this._linePoints.length; i++) {
             const dataValue = this._linePoints[i].x;
 
-            if ((max === -1) || (dataValue > max)) max = dataValue;
+            if ((max === null) || (dataValue > max)) max = dataValue;
         }
 
         return max;
     }
 
-    public get minY(): number {
-        let min = -1;
+    public get minY(): number | null {
+        let min: number | null = null;
 
         for (let i=0; i<this._linePoints.length; i++) {
             const dataValue = this._linePoints[i].y;
 
-            if ((min === -1) || (dataValue < min)) min = dataValue;
+            if ((min === null) || (dataValue < min)) min = dataValue;
         }
 
         return min;
     }
 
-    public get maxY(): number {
-        let max = -1;
+    public get maxY(): number | null {
+        let max: number | null = null;
 
         for (let i=0; i<this._linePoints.length; i++) {
             const dataValue = this._linePoints[i].y;
 
-            if ((max === -1) || (dataValue > max)) max = dataValue;
+            if ((max === null) || (dataValue > max)) max = dataValue;
         }
 
         return max;
     }
 
-    public get minZ(): number {
+    public get minZ(): number | null {
         return 0;
     }
 
-    public get maxZ(): number {
+    public get maxZ(): number | null {
         return 0;
     }
 
     public get width(): number {
-        return this.maxX-this.minX;
+        const maxX = this.maxX;
+        const minX = this.minX;
+
+        if (maxX && minX) return maxX-minX;
+        else return 0;
     }
 
     public get length(): number {

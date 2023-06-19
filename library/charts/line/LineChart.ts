@@ -4,12 +4,11 @@ import {
 
 import { Chart } from "../Chart";
 
-import { SeriesCollection } from "../SeriesCollection";
-
 import { LineSeries } from "./LineSeries";
 import { LinePoint } from "./LinePoint";
 
 import { SeriesLabel } from '../../labels/SeriesLabel';
+import { ILineSeriesData } from './ILineSeriesData';
 
 export class LineChart extends Chart {
     private lineWidth: number = 2.5; // the width of the lines on the graph
@@ -18,7 +17,7 @@ export class LineChart extends Chart {
     private rowLabelColor: Color = 0x000000; // the default color for the row label
     private pointSpace: number = 5; // the space between each category in a row
 
-    constructor(data, chartConfig) {
+    constructor(data: Array<ILineSeriesData>, chartConfig) {
         super(chartConfig);
         
         // Allow the override using the graphData options if they exist
@@ -37,15 +36,15 @@ export class LineChart extends Chart {
         }
     }
 
-    private buildSeries(data) {
+    private buildSeries(data: Array<ILineSeriesData>) {
         if (data) {
             for (let i=0; i<data.length; i++) {
-                if (data[i].id == undefined) data[i].id = i.toString();
+                let color;
 
-                if (data[i].color !== undefined) data[i].color = new Color(data[i].color);
-                else data[i].color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
+                if (data[i].color !== undefined) color = new Color(data[i].color);
+                else color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
 
-                const series = new LineSeries(i, data[i], this.pointSpace, this.lineWidth);
+                const series = new LineSeries(i, data[i], color, this.pointSpace, this.lineWidth);
 
                 data[i].values.sort(function(a,b) {
                     return a.x > b.x ? 1 : a.x < b.x ? -1 : 0;
@@ -59,8 +58,8 @@ export class LineChart extends Chart {
 
                 this.seriesCollection.addSeries(series);
 
-                if (data[i].title) {
-                    const rowLabel = new SeriesLabel(i, this.rowSpace, this.lineWidth, this.rowLabelSize, this.rowLabelColor, data[i].title);
+                if (data[i].name) {
+                    const rowLabel = new SeriesLabel(i, this.rowSpace, this.lineWidth, this.rowLabelSize, this.rowLabelColor, data[i].name);
 
                     this.seriesCollection.addSeriesLabel(rowLabel);
                 }

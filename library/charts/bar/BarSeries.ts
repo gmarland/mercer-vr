@@ -36,7 +36,7 @@ export class BarSeries extends Series {
         return 0;
     };
 
-    public get minY() {
+    public get minY(): number | null {
         let min = null;
 
         for (let i=0; i<this._bars.length; i++) {

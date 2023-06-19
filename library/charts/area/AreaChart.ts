@@ -6,6 +6,8 @@ import { Chart } from "../Chart";
 
 import { SeriesCollection } from "../SeriesCollection";
 
+import { IAreaSeriesData } from './IAreaSeriesData';
+
 import { AreaSeries } from "./AreaSeries";
 import { AreaPoint } from "./AreaPoint";
 
@@ -18,7 +20,7 @@ export class AreaChart extends Chart {
     private rowLabelColor: number = 0x000000; // the default color for the row label
     private pointSpace: number = 5; // the space between each category in a row
 
-    constructor(data, chartConfig) {
+    constructor(data: Array<IAreaSeriesData>, chartConfig) {
         super(chartConfig);
 
         // Allow the override using the graphData options if they exist
@@ -39,20 +41,20 @@ export class AreaChart extends Chart {
         this.buildSeries(data);
     }
      
-    private buildSeries(data): void {
+    private buildSeries(data: Array<IAreaSeriesData>): void {
         this.seriesCollection = new SeriesCollection(this.rowSpace);
 
         // check that we've have some data passed in
         if (data) {
             for (let i=0; i<data.length; i++) {
-                if (data[i].id == undefined) data[i].id = i.toString();
+                let color;
 
-                if (data[i].color !== undefined) data[i].color = new Color(data[i].color);
-                else data[i].color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
+                if (data[i].color) color = new Color(data[i].color);
+                else color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
 
-                const series = new AreaSeries(i, data[i], this.pointSpace, this.areaWidth);
+                const series = new AreaSeries(i, data[i], color, this.pointSpace, this.areaWidth);
 
-                data[i].values.sort(function(a,b) {
+                data[i].values.sort(function(a, b) {
                     return a.x > b.x ? 1 : a.x < b.x ? -1 : 0;
                 });
 
@@ -64,8 +66,8 @@ export class AreaChart extends Chart {
 
                 this.seriesCollection.addSeries(series);
 
-                if (data[i].title) {
-                    const seriesLabel = new SeriesLabel(i, this.rowSpace, this.areaWidth, this.rowLabelSize, this.rowLabelColor, data[i].title);
+                if (data[i].name) {
+                    const seriesLabel = new SeriesLabel(i, this.rowSpace, this.areaWidth, this.rowLabelSize, this.rowLabelColor, data[i].name);
 
                     this.seriesCollection.addSeriesLabel(seriesLabel);
                 }

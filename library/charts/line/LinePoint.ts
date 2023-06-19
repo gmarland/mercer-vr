@@ -1,7 +1,17 @@
-import { Point } from "../Point";
+export class LinePoint {
+    private _x: number;
+    private _y: number;
 
-export class LinePoint extends Point {
     constructor(x: number, y: number) {
-        super(x, y)
+        this._x = x;
+        this._y = y;
+    }
+
+    public get x(): number {
+        return this._x;
+    }
+
+    public get y(): number {
+        return this._y;
     }
 }

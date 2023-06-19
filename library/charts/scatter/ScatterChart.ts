@@ -6,11 +6,12 @@ import { Chart } from "../Chart";
 
 import { ScatterSeries } from "./ScatterSeries";
 import { ScatterPoint } from './ScatterPoint';
+import { IScatterSeriesData } from './IScatterSeriesData';
 
 export class ScatterChart extends Chart {
     private pointSize: number = 6; // the space between each category in a row
 
-    constructor(data, chartConfig) {
+    constructor(data: Array<IScatterSeriesData>, chartConfig) {
         super(chartConfig);
 
         if (chartConfig !== undefined) {
@@ -20,15 +21,15 @@ export class ScatterChart extends Chart {
         this.buildSeries(data);
     }
 
-    private buildSeries(data): void {
+    private buildSeries(data: Array<IScatterSeriesData>): void {
         if (data) {
             for (let i=0; i<data.length; i++) {
-                if (data[i].id == undefined) data[i].id = i.toString();
+                let color;
 
-                if (data[i].color !== undefined) data[i].color = new Color(data[i].color);
-                else data[i].color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
+                if (data[i].color !== undefined) color = new Color(data[i].color);
+                else color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
 
-                const series = new ScatterSeries(i, data[i]);
+                const series = new ScatterSeries(i, data[i], color);
 
                 data[i].values.sort(function(a,b) {
                     return a.x > b.x ? 1 : a.x < b.x ? -1 : 0;
