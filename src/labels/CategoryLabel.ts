@@ -1,22 +1,25 @@
 import { 
-    TextGeometry,
     MeshBasicMaterial,
     Mesh,
-    Box3
+    Box3,
+    Color
 } from 'three';
 
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+
 import { Label } from './Label';
+import { GeometryUtils } from '../utils/GeometryUtils';
 
 export class CategoryLabel extends Label {
-    private _category;
+    private _index: number;
 
-    constructor(category, categorySpace, categoryWidth, size, color, text) {
+    constructor(index: number, categorySpace: number, categoryWidth: number, size: number, color: Color, text: string) {
         super(categorySpace, categoryWidth, size, color, text);
 
-        this._category = category;
+        this._index = index;
     };
 
-    public draw(): void {
+    public draw(): Mesh {
         const textGeometry = new TextGeometry(this.text, {
             size: this.size,
             height: .2
@@ -32,9 +35,10 @@ export class CategoryLabel extends Label {
         textMesh.rotation.z += (Math.PI/2);
 
         const textBoxArea = new Box3().setFromObject(textMesh);
+        const textDims = GeometryUtils.getBoxSize(textBoxArea);
 
-        textMesh.position.z = (3 + textBoxArea.size().z);
-        textMesh.position.x = ((this._category*this.space) + (this._category*this.width) + (this.width/2) + (textBoxArea.size().x/2));
+        textMesh.position.z = (3 + textDims.z);
+        textMesh.position.x = ((this._index*this.space) + (this._index*this.width) + (this.width/2) + (textDims.x/2));
 
         return textMesh;
     }

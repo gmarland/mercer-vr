@@ -1,9 +1,9 @@
 import { 
     Object3D,
-    Geometry,
+    BufferGeometry,
+    BufferAttribute,
     LineBasicMaterial,
     MeshLambertMaterial,
-    Face3,
     Vector3,
     Mesh,
     Line,
@@ -120,52 +120,33 @@ export class AreaSeries extends Series {
         const frontVertices = new Array<Vector3>();
         const backVertices = new Array<Vector3>();
 
-        const areaGeometry = new Geometry();
+        const areaGeometry = new BufferGeometry();
 
         // create the front verticies
 
         for (let i=0; i<this._areaPoints.length; i++) {
             frontVertices.push(new Vector3(this._areaPoints[i].x, 0, (this._areaWidth/2)));
             frontVertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)));
+
             backVertices.push(new Vector3(this._areaPoints[i].x, 0, (this._areaWidth/2)*-1));
             backVertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)*-1));
         }
 
+        const bufferVertices = new Array<number>();
+
         for (let i=0; i<frontVertices.length; i++) {
-            areaGeometry.vertices.push(frontVertices[i]);
+            bufferVertices.push(frontVertices[i].x);
+            bufferVertices.push(frontVertices[i].y);
+            bufferVertices.push(frontVertices[i].z);
         }
 
         for (let i=0; i<backVertices.length; i++) {
-            areaGeometry.vertices.push(backVertices[i]);
+            bufferVertices.push(backVertices[i].x);
+            bufferVertices.push(backVertices[i].y);
+            bufferVertices.push(backVertices[i].z);
         }
 
-        // Add the front face
-        for (let i=0; i<frontVertices.length-2; i+=2) {
-            areaGeometry.faces.push( new Face3( i, (i+1), (i+3) ) );
-            areaGeometry.faces.push( new Face3( i, (i+2), (i+3) ) );
-        }
-
-        // Add the back face
-        for (let i=frontVertices.length; i<(frontVertices.length+backVertices.length)-2; i+=2) {
-            areaGeometry.faces.push( new Face3( i, (i+1), (i+3) ) );
-            areaGeometry.faces.push( new Face3( i, (i+2), (i+3) ) );
-        }
-            
-        // add the opening face
-        areaGeometry.faces.push( new Face3( 0, (frontVertices.length), (frontVertices.length+1) ) );
-        areaGeometry.faces.push( new Face3( 0, 1, (frontVertices.length+1) ) );
-
-        // Add the joining face
-        for (let i=0; i<frontVertices.length-2; i+=2) {
-            areaGeometry.faces.push( new Face3( (i+1), (i+3), (i+(frontVertices.length+3)) ) );
-            areaGeometry.faces.push( new Face3( (i+1), (i+(frontVertices.length+1)), (i+(frontVertices.length+3)) ) );
-        }
-
-        // add the end face
-        areaGeometry.faces.push( new Face3( (frontVertices.length-2), (frontVertices.length-1), (frontVertices.length+backVertices.length-2) ) );
-        areaGeometry.faces.push( new Face3( (frontVertices.length-1), (frontVertices.length+backVertices.length-1), (frontVertices.length+backVertices.length-2) ) );
-
-        areaGeometry.computeFaceNormals();
+        areaGeometry.setAttribute( 'position', new BufferAttribute(new Float32Array(bufferVertices), 3));
 
         const areaMesh = new Mesh(areaGeometry, new MeshLambertMaterial({
             color: this._color, 
@@ -177,10 +158,17 @@ export class AreaSeries extends Series {
         areaObject.add(areaMesh);
 
         // Generate the outline
-        const areaLineGeometry = new Geometry();
+        const areaLineGeometry = new BufferGeometry();
+
+        const lineVertices = new Array<number>();
+
         for (let i=0; i<this._areaPoints.length; i++) {
-            areaLineGeometry.vertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)));
+            lineVertices.push(this._areaPoints[i].x);
+            lineVertices.push(this._areaPoints[i].y-graphMinY);
+            lineVertices.push((this._areaWidth/2));
         }
+        
+        areaLineGeometry.setAttribute( 'position', new BufferAttribute(new Float32Array(lineVertices), 3));
 
         const areaLine = new Line(areaLineGeometry, new LineBasicMaterial({
             color: this._color

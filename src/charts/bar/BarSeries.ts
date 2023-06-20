@@ -110,7 +110,7 @@ export class BarSeries extends Series {
         this._bars.push(bar);
     }
 
-    public draw(graphMinX: number, graphMinY: number, graphMinZ: number): void {
+    public draw(graphMinX: number, graphMinY: number, graphMinZ: number): Object3D {
         const barObjects = new Object3D();
 
         for (let i=0; i<this._bars.length; i++) {

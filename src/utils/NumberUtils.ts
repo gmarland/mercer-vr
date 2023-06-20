@@ -1,5 +1,5 @@
 export class NumberUtils {
-    public static getRoundingInteger(min, max): number {
+    public static getRoundingInteger(min: number, max: number): number {
         const diff = max-min;
 
         if (diff === 0) {

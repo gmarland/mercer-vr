@@ -1,23 +1,28 @@
 import { 
-    TextGeometry,
     MeshBasicMaterial,
     Mesh,
-    Box3
+    Box3,
+    Color
 } from 'three';
 
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+
 import { Label } from './Label';
+import { GeometryUtils } from '../utils/GeometryUtils';
+import { Font } from 'three/examples/jsm/loaders/FontLoader';
 
 export class SeriesLabel extends Label {
-    private _row;
+    private _index: number;
 
-    constructor(row, rowSpace, rowWidth, size, color, text) {
-        super(rowSpace, rowWidth, size, color, text);
+    constructor(index: number, seriesSpace: number, seriesWidth: number, size: number, color: Color, text: string) {
+        super(seriesSpace, seriesWidth, size, color, text);
 
-        this._row = row;
+        this._index = index;
     }
 
     public draw(): Mesh {
         const textGeometry = new TextGeometry(this.text, {
+            font: new Font(),
             size: this.size,
             height: .2
         });
@@ -31,9 +36,10 @@ export class SeriesLabel extends Label {
         textMesh.rotation.x = (Math.PI/2)*-1;
 
         const textBoxArea = new Box3().setFromObject(textMesh);
+        const textDims = GeometryUtils.getBoxSize(textBoxArea);
 
         textMesh.position.x = 3;
-        textMesh.position.z = ((this._row*this.space) + (this._row*this.width) + (this.width/2) + (textBoxArea.size().z/2));
+        textMesh.position.z = ((this._index*this.space) + (this._index*this.width) + (this.width/2) + (textDims.z/2));
 
         return textMesh;
     }

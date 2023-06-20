@@ -1,6 +1,4 @@
-import { IPoint } from "./IPoint";
-
-export class ThreeDPoint implements IPoint {
+export class BoxSize {
     private _x: number;
     private _y: number;
     private _z: number;
@@ -8,7 +6,6 @@ export class ThreeDPoint implements IPoint {
     constructor(x: number, y: number, z: number) {
         this._x = x;
         this._y = y;
-        this._z = z;
     }
 
     public get x(): number {

@@ -17,7 +17,7 @@ export class AreaChart extends Chart {
     private areaWidth: number = 4; // the width of the area graph
     private rowSpace: number = 30; // the space between each row
     private rowLabelSize: number = 4; // the font size for the row label
-    private rowLabelColor: number = 0x000000; // the default color for the row label
+    private rowLabelColor: Color = new Color("#000000"); // the default color for the row label
     private pointSpace: number = 5; // the space between each category in a row
 
     constructor(data: Array<IAreaSeriesData>, chartConfig) {

@@ -1,11 +1,15 @@
+import { 
+    Color 
+} from "three";
+
 export class Label {
     private _space: number; 
     private _width: number; 
     private _size: number; 
-    private _color; 
-    private _text;
+    private _color: Color; 
+    private _text: string;
 
-    constructor(space, width, size, color, text) {
+    constructor(space: number, width: number, size: number, color: Color, text: string) {
         this._space = space; 
         this._width = width; 
         this._size = size; 
@@ -25,11 +29,11 @@ export class Label {
         return this._size;
     }
 
-    public get color() {
+    public get color(): Color {
         return this._color;
     }
 
-    public get text() {
+    public get text(): string {
         return this._text;
     }
 }

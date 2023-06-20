@@ -5,20 +5,21 @@ import {
     MeshBasicMaterial,
     DoubleSide,
     Object3D,
-    Geometry,
-    Vector3,
     LineBasicMaterial,
     Line,
     TextGeometry,
     Box3,
-    Color
+    Color,
+    BufferAttribute,
+    BufferGeometry
 } from 'three';
 
 import { SeriesCollection } from './SeriesCollection';
 
 import { IChartConfig } from './IChartConfig';
 
-import { NumberUtils } from '../utils/numberUtils';
+import { NumberUtils } from '../utils/NumberUtils';
+import { GeometryUtils } from '../utils/GeometryUtils';
 
 export class Chart {
     private _chartObject: Object3D;
@@ -28,15 +29,13 @@ export class Chart {
     // Details of the chart
     private _baseEdge: number = 10; // the distance around the charting area for the base
     private _baseThickness: number = 1; // the thickness of the chart base
-    private _baseColor: Color = 0xececec; // the color for the base
+    private _baseColor: Color = new Color("#ececec"); // the color for the base
 
     private _showMeasurementLines: boolean = true; // whether or not to show measurement lines
     private _numberOfMeasurementLines = 10;
-    private _measurementLineColor: Color = 0x222222; // the default color of the measurement lines
+    private _measurementLineColor: Color = new Color("#222222"); // the default color of the measurement lines
     private _measurementLabelSize: number = 5; // the font size for the measurement label
-    private _measurementLabelColor: Color = 0x000000; // the default color for the measurement label
-
-    private _font;
+    private _measurementLabelColor: Color = new Color("#000000"); // the default color for the measurement label
 
     private _baseMesh: Mesh;
     private _measurementLines: Object3D = null;
@@ -49,7 +48,7 @@ export class Chart {
 
             if (chartConfig.baseThickness !== undefined) this._baseThickness = chartConfig.baseThickness;
 
-            if (chartConfig.baseColor !== undefined) this._baseColor = chartConfig.baseColor;
+            if (chartConfig.baseColor !== undefined) this._baseColor = new Color(chartConfig.baseColor);
 
             if (chartConfig.showMeasurementLines !== undefined) this._showMeasurementLines = chartConfig.showMeasurementLines;
 
@@ -102,9 +101,13 @@ export class Chart {
         const chartObjectArea = new Box3().setFromObject(this._chartObject);
 
         // position the object so it will view well
-        this._chartObject.position.x = ((chartObjectArea.size().x/2)*-1);
-        this._chartObject.position.y = ((chartObjectArea.size().y/2)*-1);
-        this._chartObject.position.z = ((chartObjectArea.size().z/2)*-1);
+        const sizeX = chartObjectArea.max.x - chartObjectArea.min.x;
+        const sizeY = chartObjectArea.max.y - chartObjectArea.min.y;
+        const sizeZ = chartObjectArea.max.z - chartObjectArea.min.z;
+
+        this._chartObject.position.x = ((sizeX/2)*-1);
+        this._chartObject.position.y = ((sizeY/2)*-1);
+        this._chartObject.position.z = ((sizeZ/2)*-1);
     }
 
     public get seriesCollection(): SeriesCollection {
@@ -115,7 +118,7 @@ export class Chart {
         this._seriesCollection = value;
     }
 
-    private drawBase(chartWidth, chartLength, baseEdge, baseThickness, baseColor): void {
+    private drawBase(chartWidth: number, chartLength: number, baseEdge: number, baseThickness: number, baseColor: Color): Mesh {
         const baseWidth = chartWidth+(baseEdge*2),
             baseLength = chartLength+(baseEdge*2);
 
@@ -133,16 +136,26 @@ export class Chart {
         return baseMesh;
     }
 
-    private drawMeasurementsLines(chartWidth, chartLength, chartHeight, numberOfMeasurementLines, lineColor, labelSize, labelColor, minValue, maxValue): void {
+    private drawMeasurementsLines(chartWidth: number, 
+        chartLength: number, chartHeight: number, numberOfMeasurementLines: number, lineColor: Color, labelSize: number, labelColor: Color, minValue: number, maxValue: number): Object3D {
         const measurementLineObject = new Object3D();
 
         const stepsEachLine = Math.ceil(chartHeight/numberOfMeasurementLines);
 
         for (let i=1; i<=numberOfMeasurementLines; i++) {
-            const measureLineGeometry = new Geometry();
-            measureLineGeometry.vertices.push(new Vector3((chartWidth/2)*-1, (stepsEachLine*i), (chartLength/2)));
-            measureLineGeometry.vertices.push(new Vector3((chartWidth/2)*-1, (stepsEachLine*i), (chartLength/2)*-1));
-            measureLineGeometry.vertices.push(new Vector3((chartWidth/2), (stepsEachLine*i), (chartLength/2)*-1));
+            const measureLineGeometry = new BufferGeometry();
+
+            measureLineGeometry.setAttribute( 'position', new BufferAttribute(new Float32Array([
+                (chartWidth/2)*-1, 
+                (stepsEachLine*i), 
+                (chartLength/2),
+                (chartWidth/2)*-1, 
+                (stepsEachLine*i), 
+                (chartLength/2)*-1,
+                (chartWidth/2), 
+                (stepsEachLine*i), 
+                (chartLength/2)*-1
+            ]), 3));
 
             const measureLine = new Line(measureLineGeometry, new LineBasicMaterial({
                 color: lineColor,
@@ -152,7 +165,6 @@ export class Chart {
             measurementLineObject.add(measureLine);
 
             const textGeometry = new TextGeometry((minValue+Math.round((maxValue-minValue)/numberOfMeasurementLines)*i).toString(), {
-                font: this._font,
                 size: labelSize,
                 height: .2
             });
@@ -162,9 +174,10 @@ export class Chart {
             }));
 
             const textBoxArea = new Box3().setFromObject(textMesh);
+            const textBoxBox = GeometryUtils.getBoxSize(textBoxArea)
 
             textMesh.position.x += ((chartWidth/2)+5);
-            textMesh.position.y += ((stepsEachLine*i)-(textBoxArea.size().y/2));
+            textMesh.position.y += ((stepsEachLine*i)-(textBoxBox.y/2));
             textMesh.position.z -= (chartLength/2);
 
             measurementLineObject.add(textMesh);

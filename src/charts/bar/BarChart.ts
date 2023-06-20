@@ -9,17 +9,17 @@ import { CategoryLabel } from '../../labels/CategoryLabel';
 import { BarSeries } from './BarSeries';
 
 export class BarChart extends Chart {
-    private _barWidth = 15; // the width of the bar
-    private _barOpacity = 0.65; // how opaque the bars are
-    private _showBarLabels = false; // global setting, should bar labels be visible
-    private _barLabelSize = 6; // the font size for the row label
-    private _barLabelColor = 0x000000; // the default color for the row label
-    private _rowSpace = 30; // the space between each row
-    private _rowLabelSize = 4; // the font size for the row label
-    private _rowLabelColor = 0x000000; // the default color for the row label
-    private _categorySpace = 10; // the space between each category in a row
-    private _categoryLabelSize = 4; // the font size for the col label
-    private _categoryLabelColor = 0x000000; // the default color for the col label
+    private _barWidth: number = 15; // the width of the bar
+    private _barOpacity: number = 0.65; // how opaque the bars are
+    private _showBarLabels: boolean = false; // global setting, should bar labels be visible
+    private _barLabelSize: number = 6; // the font size for the row label
+    private _barLabelColor: Color = new Color("#000000"); // the default color for the row label
+    private _rowSpace: number = 30; // the space between each row
+    private _rowLabelSize: number = 4; // the font size for the row label
+    private _rowLabelColor: Color = new Color("#000000"); // the default color for the row label
+    private _categorySpace: number = 10; // the space between each category in a row
+    private _categoryLabelSize: number = 4; // the font size for the col label
+    private _categoryLabelColor: Color = new Color("#000000"); // the default color for the col label
     
     constructor(data, chartConfig) {
         super(chartConfig);
@@ -67,7 +67,7 @@ export class BarChart extends Chart {
                 // Local bar settings for labels overwrite global one
                 if (data[i].showBarLabels == undefined) data[i].showBarLabels = this._showBarLabels;
 
-                const row = new BarSeries(i, data[i], this._categorySpace, this._barWidth);
+                const series = new BarSeries(i, data[i], this._categorySpace, this._barWidth);
 
                 for (let j=0; j<data[i].values.length; j++) {
                     const bar = new Bar(j, 
@@ -80,10 +80,10 @@ export class BarChart extends Chart {
                                     this._barLabelSize, 
                                     this._barLabelColor);
 
-                    row.addBar(bar);
+                    series.addBar(bar);
                 }
 
-                this.seriesCollection.addSeries(row);
+                this.seriesCollection.addSeries(series);
 
                 if (data[i].title) {
                     const seriesLabel = new SeriesLabel(i, this._rowSpace, this._barWidth, this._rowLabelSize, this._rowLabelColor, data[i].title);
