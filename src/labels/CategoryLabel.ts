@@ -9,18 +9,26 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 import { Label } from './Label';
 import { GeometryUtils } from '../utils/GeometryUtils';
+import { Font } from 'three/examples/jsm/loaders/FontLoader';
 
 export class CategoryLabel extends Label {
     private _index: number;
 
-    constructor(index: number, categorySpace: number, categoryWidth: number, size: number, color: Color, text: string) {
-        super(categorySpace, categoryWidth, size, color, text);
+    constructor(index: number, 
+                categorySpace: number, 
+                categoryWidth: number, 
+                font: Font,
+                size: number, 
+                color: Color, 
+                text: string) {
+        super(categorySpace, categoryWidth, font, size, color, text);
 
         this._index = index;
     };
 
     public draw(): Mesh {
         const textGeometry = new TextGeometry(this.text, {
+            font: this.font,
             size: this.size,
             height: .2
         });
