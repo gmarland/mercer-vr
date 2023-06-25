@@ -113,7 +113,7 @@ export class ScatterSeries extends Series {
 
     // ----- Public Methods
 
-    public addScatterPoint(linePoint) {
+    public addScatterPoint(linePoint): void {
         this._scatterPoints.push(linePoint);
     }
 

@@ -8,6 +8,9 @@ import { SeriesLabel } from '../../labels/SeriesLabel';
 import { CategoryLabel } from '../../labels/CategoryLabel';
 import { BarSeries } from './BarSeries';
 
+import { IBarConfig } from './IBarConfig';
+import { IBarSeriesData } from './IBarSeriesData';
+
 export class BarChart extends Chart {
     private _barWidth: number = 15; // the width of the bar
     private _barOpacity: number = 0.65; // how opaque the bars are
@@ -21,7 +24,7 @@ export class BarChart extends Chart {
     private _categoryLabelSize: number = 4; // the font size for the col label
     private _categoryLabelColor: Color = new Color("#000000"); // the default color for the col label
     
-    constructor(data, chartConfig) {
+    constructor(data: Array<IBarSeriesData>, chartConfig?: IBarConfig) {
         super(chartConfig);
         
         // Allow the override using the chartConfig options if they exist
@@ -38,34 +41,27 @@ export class BarChart extends Chart {
             
             if (chartConfig.seriesSpace !== undefined) this._seriesSpace = chartConfig.seriesSpace;
 
-            if (chartConfig.seriesLabels !== undefined) {
-                if (chartConfig.seriesLabels.size !== undefined) this._seriesLabelSize = chartConfig.seriesLabels.size;
+            if (chartConfig.seriesLabelSize !== undefined) this._seriesLabelSize = chartConfig.seriesLabelSize;
 
-                if (chartConfig.seriesLabels.color !== undefined) this._seriesLabelColor = new Color(chartConfig.seriesLabels.color);
-            }
+            if (chartConfig.seriesLabelColor !== undefined) this._seriesLabelColor = new Color(chartConfig.seriesLabelColor);
 
             if (chartConfig.categorySpace !== undefined) this._categorySpace = chartConfig.categorySpace;
 
-            if (chartConfig.categoryLabels !== undefined) {
-                if (chartConfig.categoryLabels.size !== undefined) this._categoryLabelSize = chartConfig.categoryLabels.size;
+            if (chartConfig.categoryLabelSize !== undefined) this._categoryLabelSize = chartConfig.categoryLabelSize;
 
-                if (chartConfig.categoryLabels.color !== undefined) this._categoryLabelColor = new Color(chartConfig.categoryLabels.color);
-            }
+            if (chartConfig.categoryLabelColor !== undefined) this._categoryLabelColor = new Color(chartConfig.categoryLabelColor);
         }
 
         this.buildSeries(data);
     }
 
-    private buildSeries(data): void {
+    private buildSeries(data: Array<IBarSeriesData>): void {
         if (data) {
             for (let i=0; i<data.length; i++) {
-                if (data[i].id == undefined) data[i].id = i.toString();
+                let color;
 
-                if (data[i].color !== undefined) data[i].color = new Color(data[i].color);
-                else data[i].color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
-
-                // Local bar settings for labels overwrite global one
-                if (data[i].showBarLabels == undefined) data[i].showBarLabels = this._showBarLabels;
+                if (data[i].color !== undefined) color = new Color(data[i].color);
+                else color = new Color("#"+Math.floor(Math.random()*16777215).toString(16));
 
                 const series = new BarSeries(i, data[i], this._categorySpace, this._barWidth);
 
@@ -74,9 +70,9 @@ export class BarChart extends Chart {
                                     this._barWidth, 
                                     data[i].values[j], 
                                     this._categorySpace, 
-                                    data[i].color, 
+                                    color, 
                                     this._barOpacity,
-                                    data[i].showBarLabels, 
+                                    this._showBarLabels, 
                                     this.font,
                                     this._barLabelSize, 
                                     this._barLabelColor);
@@ -86,17 +82,11 @@ export class BarChart extends Chart {
 
                 this.seriesCollection.addSeries(series);
 
-                if (data[i].title) {
-                    const seriesLabel = new SeriesLabel(i, this._seriesSpace, this._barWidth, this.font, this._seriesLabelSize, this._seriesLabelColor, data[i].title);
+                if (data[i].name) {
+                    const seriesLabel = new SeriesLabel(i, this._seriesSpace, this._barWidth, this.font, this._seriesLabelSize, this._seriesLabelColor, data[i].name);
 
                     this.seriesCollection.addSeriesLabel(seriesLabel);
                 }
-            }
-
-            for (let i=0; i<data.categoryLabels.values.length; i++) {
-                const categoryLabel = new CategoryLabel(i, this._categorySpace, this._barWidth, this.font, this._categoryLabelSize, this._categoryLabelColor, data.categoryLabels.values[i]);
-
-                this.seriesCollection.addCategoryLabel(categoryLabel);
             }
         }
     }

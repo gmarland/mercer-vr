@@ -21,7 +21,7 @@ export class AreaChart extends Chart {
     private _seriesLabelColor: Color = new Color("#000000"); // the default color for the row label
     private _pointSpace: number = 5; // the space between each category in a row
 
-    constructor(data: Array<IAreaSeriesData>, chartConfig: IAreaChartConfig) {
+    constructor(data: Array<IAreaSeriesData>, chartConfig?: IAreaChartConfig) {
         super(chartConfig);
 
         // Allow the override using the graphData options if they exist

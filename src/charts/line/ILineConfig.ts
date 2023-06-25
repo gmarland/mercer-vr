@@ -3,11 +3,11 @@ import { IChartConfig } from "../IChartConfig";
 export interface ILineConfig extends IChartConfig {
     lineWidth?: number;
 
-    rowSpace?: number;
+    seriesSpace?: number;
 
-    rowLabelSize?: number;
+    seriesLabelSize?: number;
 
-    rowLabelColor?: string;
+    seriesLabelColor?: string;
 
     pointSpace?: number;
 }

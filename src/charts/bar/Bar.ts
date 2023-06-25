@@ -17,40 +17,41 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 import { Font } from 'three/examples/jsm/loaders/FontLoader';
 import { GeometryUtils } from '../../utils/GeometryUtils';
+import { BarPoint } from '../../data/point/BarPoint';
 
 export class Bar {
-    private _category;
-    private _barWidth;
-    private _color;
-    private _opacity;
-    private _dataValue;
-    private _categorySpace;
-    private _showLabels;
+    private _index;
+    private _barWidth: number;
+    private _color: Color;
+    private _opacity: number;
+    private _dataValue: BarPoint;
+    private _indexSpace: number;
+    private _showLabels: boolean;
 
     private _font: Font;
-    private _labelSize;
-    private _labelColor;
+    private _labelSize: number;
+    private _labelColor: Color;
 
     private _height: number;
 
     private _barObject: Object3D;
 
-    constructor(category, 
-                barWidth, 
-                dataValue, 
-                categorySpace, 
-                color, 
-                opacity, 
-                showLabels,
+    constructor(index: number, 
+                barWidth: number, 
+                dataValue: BarPoint, 
+                categorySpace: number, 
+                color: Color, 
+                opacity: number, 
+                showLabels: boolean,
                 font: Font, 
-                labelSize, 
-                labelColor) {
-        this._category = category;
+                labelSize: number, 
+                labelColor: Color) {
+        this._index = index;
         this._barWidth = barWidth;
         this._color = color;
         this._opacity = opacity;
         this._dataValue = dataValue;
-        this._categorySpace = categorySpace;
+        this._indexSpace = categorySpace;
         this._showLabels = showLabels;
         this._font = font;
         this._labelSize = labelSize;
@@ -59,19 +60,19 @@ export class Bar {
 
     // ----- Getters
 
-    public getDataValue() {
+    public getDataValue(): BarPoint {
         return this._dataValue;
     };
 
-    public getHeight() {
+    public getHeight(): number {
         return this._height;
     };
 
-    public getBarWidth() {
+    public getBarWidth(): number {
         return this._barWidth;
     };
 
-    public getBarObject() {
+    public getBarObject(): Object3D {
         return this._barObject;
     }
 
@@ -81,9 +82,9 @@ export class Bar {
         this._barObject = new Object3D();
 
         // Calculate the bar geometry
-        const xPos = ((this._category*this._categorySpace) + (this._category*barWidth)) + (barWidth/2);
+        const xPos = ((this._index*this._indexSpace) + (this._index*barWidth)) + (barWidth/2);
 
-        this._height = (this._dataValue-graphMinY);
+        this._height = (this._dataValue.value-graphMinY);
 
         const barGeometry = new BufferGeometry();
 
@@ -123,7 +124,7 @@ export class Bar {
         this._barObject.add(barOutline);
 
         if (this._showLabels) {
-            const valueGeometry = new TextGeometry(this._dataValue, {
+            const valueGeometry = new TextGeometry(this._dataValue.name, {
                 font: this._font,
                 size: this._labelSize,
                 height: .2

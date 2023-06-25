@@ -1,10 +1,10 @@
 import { 
-    Geometry,
     LineBasicMaterial,
     Object3D,
-    Vector3,
     Line,
-    Color
+    Color,
+    BufferGeometry,
+    BufferAttribute
 } from 'three';
 
 import { Series } from '../Series';
@@ -107,18 +107,25 @@ export class LineSeries extends Series {
 
     // ----- Public Methods
 
-    addLinePoint(linePoint) {
+    addLinePoint(linePoint): void {
         this._linePoints.push(linePoint);
     }
 
-    draw(graphMinX: number, graphMinY: number, graphMinZ: number) {    
+    draw(graphMinX: number, graphMinY: number, graphMinZ: number): Object3D {    
         const lineObject = new Object3D();
 
         // Generate the outline
-        const lineGeometry = new Geometry();
+        const lineGeometry = new BufferGeometry();
+
+        const points = new Array<number>();
+
         for (let i=0; i<this._linePoints.length; i++) {
-            lineGeometry.vertices.push(new Vector3(this._linePoints[i].x, this._linePoints[i].y-graphMinY, (this._lineWidth/2)));
+            points.push(this._linePoints[i].x);
+            points.push(this._linePoints[i].y-graphMinY);
+            points.push(this._lineWidth/2);
         }
+        
+        lineGeometry.setAttribute( 'position', new BufferAttribute(new Float32Array(points), 3));
 
         const areaLine = new Line(lineGeometry, new LineBasicMaterial({
             color: this._color

@@ -1,20 +1,21 @@
 import { 
     Object3D
 } from 'three';
+
 import { Series } from './Series';
 
 import { SeriesLabel } from '../labels/SeriesLabel';
 import { CategoryLabel } from '../labels/CategoryLabel';
 
 export class SeriesCollection {
-    private _seriesSpace;
+    private _seriesSpace: number;
 
     private _allSeries: Array<Series>;
 
     private _seriesLabels: Array<SeriesLabel>;
     private _categoryLabels: Array<CategoryLabel>;
     
-    constructor(seriesSpace) {
+    constructor(seriesSpace: number) {
         this._seriesSpace = seriesSpace;
 
         this._allSeries = new Array<Series>();
@@ -25,7 +26,7 @@ export class SeriesCollection {
 
     // ----- Getters
 
-    public get minX() {
+    public get minX(): number {
         let min = 0;
 
         for (let i=0; i<this._allSeries.length; i++) {
@@ -37,7 +38,7 @@ export class SeriesCollection {
         return min;
     }
 
-    public get maxX() {
+    public get maxX(): number {
         let max = 0;
 
         for (let i=0; i<this._allSeries.length; i++) {
@@ -49,7 +50,7 @@ export class SeriesCollection {
         return max;
     }
 
-    public get minY() {
+    public get minY(): number {
         let min = 0;
 
         for (let i=0; i<this._allSeries.length; i++) {
@@ -61,7 +62,7 @@ export class SeriesCollection {
         return min;
     }
 
-    public get maxY() {
+    public get maxY(): number {
         let max = 0;
 
         for (let i=0; i<this._allSeries.length; i++) {
@@ -73,7 +74,7 @@ export class SeriesCollection {
         return max;
     }
 
-    public get minZ() {
+    public get minZ(): number {
         let min = 0;
 
         for (let i=0; i<this._allSeries.length; i++) {
@@ -85,7 +86,7 @@ export class SeriesCollection {
         return min;
     }
 
-    public get maxZ() {
+    public get maxZ(): number {
         let max = 0;
 
         for (let i=0; i<this._allSeries.length; i++) {
@@ -97,7 +98,7 @@ export class SeriesCollection {
         return max;
     }
 
-    public get width() {
+    public get width(): number {
         let maxWidth = 0;
 
         for (let i=0; i<this._allSeries.length; i++) {
@@ -109,7 +110,7 @@ export class SeriesCollection {
         return maxWidth;
     }
 
-    public get length() {
+    public get length(): number {
         if (this._seriesSpace) {
             let totalLength = 0;
 
@@ -136,19 +137,19 @@ export class SeriesCollection {
 
     // ----- Public Methods
 
-    public addSeries(series: Series) {
+    public addSeries(series: Series): void {
         this._allSeries.push(series);
     }
 
-    public addSeriesLabel(seriesLabel) {
+    public addSeriesLabel(seriesLabel: SeriesLabel): void {
         this._seriesLabels.push(seriesLabel);
     }
 
-    public addCategoryLabel(categoryLabel) {
+    public addCategoryLabel(categoryLabel: CategoryLabel): void {
         this._categoryLabels.push(categoryLabel);
     }
 
-    public drawAllSeries(graphMinY, graphMaxY) {
+    public drawAllSeries(graphMinY: number, graphMaxY: number): Object3D {
         const collectionObjects = new Object3D();
 
         for (let i=0; i<this._allSeries.length; i++) {
@@ -162,7 +163,7 @@ export class SeriesCollection {
         return collectionObjects;
     }
 
-    public drawSeriesLabels() {
+    public drawSeriesLabels(): Object3D {
         const seriesLabelObjects = new Object3D();
 
         for (let i=0; i<this._seriesLabels.length; i++) {
@@ -172,7 +173,7 @@ export class SeriesCollection {
         return seriesLabelObjects;
     }
 
-    public drawCategoryLabels() {
+    public drawCategoryLabels(): Object3D {
         const categoryLabelObjects = new Object3D();
 
         for (let i=0; i<this._categoryLabels.length; i++) {

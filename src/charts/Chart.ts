@@ -133,7 +133,11 @@ export class Chart {
         this._seriesCollection = value;
     }
 
-    private drawBase(chartWidth: number, chartLength: number, baseEdge: number, baseThickness: number, baseColor: Color): Mesh {
+    private drawBase(chartWidth: number, 
+                        chartLength: number, 
+                        baseEdge: number, 
+                        baseThickness: number, 
+                        baseColor: Color): Mesh {
         const baseWidth = chartWidth+(baseEdge*2),
             baseLength = chartLength+(baseEdge*2);
 
@@ -152,7 +156,14 @@ export class Chart {
     }
 
     private drawMeasurementsLines(chartWidth: number, 
-        chartLength: number, chartHeight: number, numberOfMeasurementLines: number, lineColor: Color, labelSize: number, labelColor: Color, minValue: number, maxValue: number): Object3D {
+                                    chartLength: number, 
+                                    chartHeight: number, 
+                                    numberOfMeasurementLines: number, 
+                                    lineColor: Color, 
+                                    labelSize: number, 
+                                    labelColor: Color, 
+                                    minValue: number, 
+                                    maxValue: number): Object3D {
         const measurementLineObject = new Object3D();
 
         const stepsEachLine = Math.ceil(chartHeight/numberOfMeasurementLines);
