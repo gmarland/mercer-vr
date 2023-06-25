@@ -14,15 +14,21 @@ import { Font } from 'three/examples/jsm/loaders/FontLoader';
 export class SeriesLabel extends Label {
     private _index: number;
 
-    constructor(index: number, seriesSpace: number, seriesWidth: number, size: number, color: Color, text: string) {
-        super(seriesSpace, seriesWidth, size, color, text);
+    constructor(index: number, 
+                seriesSpace: number, 
+                seriesWidth: number,  
+                font: Font,
+                size: number, 
+                color: Color, 
+                text: string) {
+        super(seriesSpace, seriesWidth, font, size, color, text);
 
         this._index = index;
     }
 
     public draw(): Mesh {
         const textGeometry = new TextGeometry(this.text, {
-            font: new Font(),
+            font: this.font,
             size: this.size,
             height: .2
         });

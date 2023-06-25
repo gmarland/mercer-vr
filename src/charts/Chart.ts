@@ -7,12 +7,14 @@ import {
     Object3D,
     LineBasicMaterial,
     Line,
-    TextGeometry,
     Box3,
     Color,
     BufferAttribute,
     BufferGeometry
 } from 'three';
+
+import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 import { SeriesCollection } from './SeriesCollection';
 
@@ -25,6 +27,9 @@ export class Chart {
     private _chartObject: Object3D;
 
     private _seriesCollection: SeriesCollection;
+
+    private _fontLocation: string = "fonts/helvetiker_regular.typeface.json";
+    private _font: Font;
 
     // Details of the chart
     private _baseEdge: number = 10; // the distance around the charting area for the base
@@ -43,7 +48,9 @@ export class Chart {
     constructor(chartConfig?: IChartConfig) {
         this._chartObject = new Object3D();
 
-        if (chartConfig) {        
+        if (chartConfig) {    
+            if (chartConfig.font) this._fontLocation = chartConfig.font;
+            
             if (chartConfig.baseEdge !== undefined) this._baseEdge = chartConfig.baseEdge;
 
             if (chartConfig.baseThickness !== undefined) this._baseThickness = chartConfig.baseThickness;
@@ -58,6 +65,14 @@ export class Chart {
 
             if (chartConfig.measurementLabelColor !== undefined) this._measurementLabelColor = new Color(chartConfig.measurementLabelColor);
         }
+
+        this.loadFont(this._fontLocation).then((font: Font) => {
+            this._font = font;
+        });
+    }
+
+    public get font(): Font {
+        return this._font;
     }
 
     public draw(): void {
@@ -165,6 +180,7 @@ export class Chart {
             measurementLineObject.add(measureLine);
 
             const textGeometry = new TextGeometry((minValue+Math.round((maxValue-minValue)/numberOfMeasurementLines)*i).toString(), {
+                font: this._font,
                 size: labelSize,
                 height: .2
             });
@@ -174,7 +190,7 @@ export class Chart {
             }));
 
             const textBoxArea = new Box3().setFromObject(textMesh);
-            const textBoxBox = GeometryUtils.getBoxSize(textBoxArea)
+            const textBoxBox = GeometryUtils.getBoxSize(textBoxArea);
 
             textMesh.position.x += ((chartWidth/2)+5);
             textMesh.position.y += ((stepsEachLine*i)-(textBoxBox.y/2));
@@ -187,5 +203,16 @@ export class Chart {
         measurementLineObject.position.z = (chartLength/2);
 
         return measurementLineObject;
+    };
+
+    
+    private async loadFont(fontLocation: string): Promise<Font> {
+        return new Promise((resolve) => {
+            const loader = new FontLoader();
+            
+            loader.load(fontLocation, (response: Font) => {
+                resolve(response);
+            });
+        });
     };
 }

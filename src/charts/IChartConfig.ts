@@ -1,4 +1,6 @@
 export interface IChartConfig {
+    font?: string;
+
     baseEdge?: number;
     
     baseThickness?: number;

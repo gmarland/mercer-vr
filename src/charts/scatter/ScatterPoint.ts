@@ -38,7 +38,7 @@ export class ScatterPoint {
         return this._pointSize;
     }
     
-    public draw(color): void {
+    public draw(color): Mesh {
         const pointGeometry = new SphereGeometry(this._pointSize, 100, 100),
             pointMaterial = new MeshLambertMaterial({
                 color: color,

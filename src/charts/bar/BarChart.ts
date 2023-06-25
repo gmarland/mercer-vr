@@ -12,12 +12,12 @@ export class BarChart extends Chart {
     private _barWidth: number = 15; // the width of the bar
     private _barOpacity: number = 0.65; // how opaque the bars are
     private _showBarLabels: boolean = false; // global setting, should bar labels be visible
-    private _barLabelSize: number = 6; // the font size for the row label
-    private _barLabelColor: Color = new Color("#000000"); // the default color for the row label
-    private _rowSpace: number = 30; // the space between each row
-    private _rowLabelSize: number = 4; // the font size for the row label
-    private _rowLabelColor: Color = new Color("#000000"); // the default color for the row label
-    private _categorySpace: number = 10; // the space between each category in a row
+    private _barLabelSize: number = 6; // the font size for the series label
+    private _barLabelColor: Color = new Color("#000000"); // the default color for the series label
+    private _seriesSpace: number = 30; // the space between each series
+    private _seriesLabelSize: number = 4; // the font size for the series label
+    private _seriesLabelColor: Color = new Color("#000000"); // the default color for the series label
+    private _categorySpace: number = 10; // the space between each category in a series
     private _categoryLabelSize: number = 4; // the font size for the col label
     private _categoryLabelColor: Color = new Color("#000000"); // the default color for the col label
     
@@ -36,12 +36,12 @@ export class BarChart extends Chart {
 
             if (chartConfig.barLabelColor !== undefined) this._barLabelColor = new Color(chartConfig.barLabelColor);
             
-            if (chartConfig.rowSpace !== undefined) this._rowSpace = chartConfig.rowSpace;
+            if (chartConfig.seriesSpace !== undefined) this._seriesSpace = chartConfig.seriesSpace;
 
-            if (chartConfig.rowLabels !== undefined) {
-                if (chartConfig.rowLabels.size !== undefined) this._rowLabelSize = chartConfig.rowLabels.size;
+            if (chartConfig.seriesLabels !== undefined) {
+                if (chartConfig.seriesLabels.size !== undefined) this._seriesLabelSize = chartConfig.seriesLabels.size;
 
-                if (chartConfig.rowLabels.color !== undefined) this._rowLabelColor = new Color(chartConfig.rowLabels.color);
+                if (chartConfig.seriesLabels.color !== undefined) this._seriesLabelColor = new Color(chartConfig.seriesLabels.color);
             }
 
             if (chartConfig.categorySpace !== undefined) this._categorySpace = chartConfig.categorySpace;
@@ -77,6 +77,7 @@ export class BarChart extends Chart {
                                     data[i].color, 
                                     this._barOpacity,
                                     data[i].showBarLabels, 
+                                    this.font,
                                     this._barLabelSize, 
                                     this._barLabelColor);
 
@@ -86,14 +87,14 @@ export class BarChart extends Chart {
                 this.seriesCollection.addSeries(series);
 
                 if (data[i].title) {
-                    const seriesLabel = new SeriesLabel(i, this._rowSpace, this._barWidth, this._rowLabelSize, this._rowLabelColor, data[i].title);
+                    const seriesLabel = new SeriesLabel(i, this._seriesSpace, this._barWidth, this.font, this._seriesLabelSize, this._seriesLabelColor, data[i].title);
 
                     this.seriesCollection.addSeriesLabel(seriesLabel);
                 }
             }
 
             for (let i=0; i<data.categoryLabels.values.length; i++) {
-                const categoryLabel = new CategoryLabel(i, this._categorySpace, this._barWidth, this._categoryLabelSize, this._categoryLabelColor, data.categoryLabels.values[i]);
+                const categoryLabel = new CategoryLabel(i, this._categorySpace, this._barWidth, this.font, this._categoryLabelSize, this._categoryLabelColor, data.categoryLabels.values[i]);
 
                 this.seriesCollection.addCategoryLabel(categoryLabel);
             }

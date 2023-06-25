@@ -117,16 +117,16 @@ export class ScatterSeries extends Series {
         this._scatterPoints.push(linePoint);
     }
 
-    public draw(graphMinX, graphMinY, graphMinZ) {    
-        const rowObject = new Object3D();
+    public draw(graphMinX: number, graphMinY: number, graphMinZ: number): Object3D {    
+        const seriesObject = new Object3D();
 
         for (let i=0; i<this._scatterPoints.length; i++) {
-            rowObject.add(this._scatterPoints[i].draw(this._color));
+            seriesObject.add(this._scatterPoints[i].draw(this._color));
         }
 
-        rowObject.position.x -= graphMinX;
-        rowObject.position.z -= graphMinZ;
+        seriesObject.position.x -= graphMinX;
+        seriesObject.position.z -= graphMinZ;
 
-        return rowObject;
+        return seriesObject;
     };
 }

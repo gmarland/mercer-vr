@@ -1,18 +1,22 @@
 import { 
-    Face3,
     Vector3,
-    Geometry,
     Line,
     LineBasicMaterial,
-    TextGeometry,
     Mesh,
     MeshBasicMaterial,
     MeshLambertMaterial,
     Box3,
     Object3D,
     DoubleSide,
-    Color
+    Color,
+    BufferGeometry,
+    BufferAttribute
 } from 'three';
+
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+
+import { Font } from 'three/examples/jsm/loaders/FontLoader';
+import { GeometryUtils } from '../../utils/GeometryUtils';
 
 export class Bar {
     private _category;
@@ -22,14 +26,25 @@ export class Bar {
     private _dataValue;
     private _categorySpace;
     private _showLabels;
+
+    private _font: Font;
     private _labelSize;
     private _labelColor;
 
     private _height: number;
 
-    private _barObject: Object3D = null;
+    private _barObject: Object3D;
 
-    constructor(category, barWidth, dataValue, categorySpace, color, opacity, showLabels, labelSize, labelColor) {
+    constructor(category, 
+                barWidth, 
+                dataValue, 
+                categorySpace, 
+                color, 
+                opacity, 
+                showLabels,
+                font: Font, 
+                labelSize, 
+                labelColor) {
         this._category = category;
         this._barWidth = barWidth;
         this._color = color;
@@ -37,6 +52,7 @@ export class Bar {
         this._dataValue = dataValue;
         this._categorySpace = categorySpace;
         this._showLabels = showLabels;
+        this._font = font;
         this._labelSize = labelSize;
         this._labelColor = labelColor;
     }
@@ -61,7 +77,7 @@ export class Bar {
 
     // ----- Public Methods
 
-    public draw(graphMinY: number, barWidth: number) {
+    public draw(graphMinY: number, barWidth: number): Object3D {
         this._barObject = new Object3D();
 
         // Calculate the bar geometry
@@ -69,32 +85,20 @@ export class Bar {
 
         this._height = (this._dataValue-graphMinY);
 
-        const barGeometry = new Geometry();
-        barGeometry.dynamic = true;
+        const barGeometry = new BufferGeometry();
 
-        // Plot the verticies
-        barGeometry.vertices = this.getBarVertices(xPos, 0, this._height, barWidth);
+        // Get the verticies
+        const vertices = this.getBarVertices(xPos, 0, this._height, barWidth);
 
-        // Add the faces
-        barGeometry.faces.push( new Face3( 0, 1, 4 ) );
-        barGeometry.faces.push( new Face3( 4, 5, 1 ) );
+        const barPoints = new Array<number>();
 
-        barGeometry.faces.push( new Face3( 3, 2, 7 ) );
-        barGeometry.faces.push( new Face3( 7, 6, 2 ) );
+        for (let i=0; i<vertices.length; i++) {
+            barPoints.push(vertices[i].x);
+            barPoints.push(vertices[i].y);
+            barPoints.push(vertices[i].z);
+        }
 
-        barGeometry.faces.push( new Face3( 1, 3, 5 ) );
-        barGeometry.faces.push( new Face3( 5, 7, 3 ) );
-
-        barGeometry.faces.push( new Face3( 0, 2, 4 ) );
-        barGeometry.faces.push( new Face3( 4, 6, 2 ) );
-
-        barGeometry.faces.push( new Face3( 4, 5, 7 ) );
-        barGeometry.faces.push( new Face3( 6, 7, 4 ) );
-
-        barGeometry.faces.push( new Face3( 0, 1, 3 ) );
-        barGeometry.faces.push( new Face3( 0, 2, 3 ) );
-
-        barGeometry.computeFaceNormals();
+        barGeometry.setAttribute('position', new BufferAttribute(new Float32Array(barPoints), 3));
 
         const barMesh = new Mesh(barGeometry, new MeshLambertMaterial({
             color: this._color, 
@@ -120,6 +124,7 @@ export class Bar {
 
         if (this._showLabels) {
             const valueGeometry = new TextGeometry(this._dataValue, {
+                font: this._font,
                 size: this._labelSize,
                 height: .2
             });
@@ -129,8 +134,9 @@ export class Bar {
             }));
 
             const valueArea = new Box3().setFromObject(valueMesh);
+            const valueBox = GeometryUtils.getBoxSize(valueArea)
 
-            valueMesh.position.x = xPos-(valueArea.size().x/2);
+            valueMesh.position.x = xPos-(valueBox.x/2);
             valueMesh.position.y = this._height + 2;
             valueMesh.position.z = 0;
 
@@ -194,8 +200,19 @@ export class Bar {
     };
 
     private getOutlineMesh(type: string, xPos: number, zPos: number, height: number, width: number, color: Color) {
-        const outlineGeometry = new Geometry();
-        outlineGeometry.vertices = this.getLineGeometry(type, xPos, zPos, height, width);
+        const outlineGeometry = new BufferGeometry();
+
+        var vertices = this.getLineGeometry(type, xPos, zPos, height, width);
+
+        const outlinePoints = new Array<number>();
+
+        for (let i=0; i<vertices.length; i++) {
+            outlinePoints.push(vertices[i].x);
+            outlinePoints.push(vertices[i].y);
+            outlinePoints.push(vertices[i].z);
+        }
+        
+        outlineGeometry.setAttribute('position', new BufferAttribute(new Float32Array(outlinePoints), 3));
 
         const outline = new Line(outlineGeometry, new LineBasicMaterial({
             color: color
