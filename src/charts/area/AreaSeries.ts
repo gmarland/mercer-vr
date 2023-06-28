@@ -114,7 +114,12 @@ export class AreaSeries extends Series {
         this._areaPoints.push(areaPoint);
     }
 
-    public draw(graphMinX: number, graphMinY: number, graphMinZ: number) {    
+    public draw(graphMinX: number, 
+                xScale: number, 
+                graphMinY: number,
+                yScale: number, 
+                graphMinZ: number, 
+                zScale: number): Object3D {  
         const areaObject = new Object3D();
 
         const frontVertices = new Array<Vector3>();
@@ -122,14 +127,15 @@ export class AreaSeries extends Series {
 
         const areaGeometry = new BufferGeometry();
 
+        frontVertices.push(new Vector3((this._areaPoints[0].x-graphMinX)/xScale, 0, (this._areaWidth/2)));
+        backVertices.push(new Vector3((this._areaPoints[0].x-graphMinX)/xScale, 0, (this._areaWidth/2)*-1));
+        
         // create the front verticies
 
         for (let i=0; i<this._areaPoints.length; i++) {
-            frontVertices.push(new Vector3(this._areaPoints[i].x, 0, (this._areaWidth/2)));
-            frontVertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)));
+            frontVertices.push(new Vector3((this._areaPoints[i].x-graphMinX)/xScale, (this._areaPoints[i].y-graphMinY)/yScale, (this._areaWidth/2)));
 
-            backVertices.push(new Vector3(this._areaPoints[i].x, 0, (this._areaWidth/2)*-1));
-            backVertices.push(new Vector3(this._areaPoints[i].x, this._areaPoints[i].y-graphMinY, (this._areaWidth/2)*-1));
+            backVertices.push(new Vector3((this._areaPoints[i].x-graphMinX)/xScale, (this._areaPoints[i].y-graphMinY)/yScale, (this._areaWidth/2)*-1));
         }
 
         const bufferVertices = new Array<number>();
@@ -140,11 +146,11 @@ export class AreaSeries extends Series {
             bufferVertices.push(frontVertices[i].z);
         }
 
-        for (let i=0; i<backVertices.length; i++) {
+        /*for (let i=0; i<backVertices.length; i++) {
             bufferVertices.push(backVertices[i].x);
             bufferVertices.push(backVertices[i].y);
             bufferVertices.push(backVertices[i].z);
-        }
+        }*/
 
         areaGeometry.setAttribute( 'position', new BufferAttribute(new Float32Array(bufferVertices), 3));
 

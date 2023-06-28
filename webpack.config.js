@@ -7,7 +7,10 @@ const isProduction = process.env.NODE_ENV == "production";
 const config = {
   entry: "./src/index.ts",
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist"),                                                                                                                                                                    
+    library: {                                                                                                                                                                       
+      type: "window",                                                                                                                                                                
+    }
   },
   devServer: {
     open: true,

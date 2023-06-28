@@ -10,7 +10,8 @@ import {
     Box3,
     Color,
     BufferAttribute,
-    BufferGeometry
+    BufferGeometry,
+    Scene
 } from 'three';
 
 import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
@@ -24,6 +25,13 @@ import { NumberUtils } from '../utils/NumberUtils';
 import { GeometryUtils } from '../utils/GeometryUtils';
 
 export class Chart {
+    private _scene: Scene;
+
+    private _width: number;
+    private _height: number;
+
+    private _seriesSpace: number = 50;
+
     private _chartObject: Object3D;
 
     private _seriesCollection: SeriesCollection;
@@ -45,8 +53,15 @@ export class Chart {
     private _baseMesh: Mesh;
     private _measurementLines: Object3D = null;
 
-    constructor(chartConfig?: IChartConfig) {
+    constructor(scene: Scene, width: number, height: number, chartConfig?: IChartConfig) {
+        this._scene = scene;
+
+        this._width = width;
+        this._height = height;
+
         this._chartObject = new Object3D();
+
+        this._seriesCollection = new SeriesCollection();
 
         if (chartConfig) {    
             if (chartConfig.font) this._fontLocation = chartConfig.font;
@@ -69,6 +84,16 @@ export class Chart {
         this.loadFont(this._fontLocation).then((font: Font) => {
             this._font = font;
         });
+
+        this._scene.add(this._chartObject);
+    }
+
+    public get seriesSpace(): number {
+        return this._seriesSpace;
+    }
+
+    public set seriesSpace(value: number) {
+        this._seriesSpace = value;
     }
 
     public get font(): Font {
@@ -76,44 +101,40 @@ export class Chart {
     }
 
     public draw(): void {
+        const minValueX = this._seriesCollection.minX;
+        const maxValueX = this._seriesCollection.maxX;
+
+        const xScale  = (maxValueX-minValueX)/this._width;
+
         const minValueY = this._seriesCollection.minY;
         const maxValueY = this._seriesCollection.maxY;
-        const rangeStepY = NumberUtils.getRoundingInteger(minValueY, maxValueY);
 
-        let minChartRangeY = (minValueY - minValueY %  rangeStepY);
-        if (minChartRangeY != 0) minChartRangeY -= rangeStepY;
+        const yScale  = (maxValueX-minValueX)/this._width;
 
-        const maxChartRangeY = (rangeStepY - maxValueY % rangeStepY) + maxValueY;
+        const chartLength = (this._seriesCollection.allSeries.length*this._seriesSpace);
 
-        const chartWidth = this._seriesCollection.width;
-        const chartLength = this._seriesCollection.length;
-
-        this._baseMesh = this.drawBase(chartWidth, chartLength, this._baseEdge, this._baseThickness, this._baseColor);
+        this._baseMesh = this.drawBase(this._width, chartLength, this._baseEdge, this._baseThickness, this._baseColor);
         
-        if (this._showMeasurementLines) this._measurementLines = this.drawMeasurementsLines(chartWidth+(this._baseEdge*2), chartLength+(this._baseEdge*2), maxChartRangeY, this._numberOfMeasurementLines, this._measurementLineColor, this._measurementLabelSize, this._measurementLabelColor, minChartRangeY, maxChartRangeY);
+        if (this._showMeasurementLines) this._measurementLines = this.drawMeasurementsLines(this._width+(this._baseEdge*2), 
+                                                                                            chartLength+(this._baseEdge*2), 
+                                                                                            this._height, 
+                                                                                            this._numberOfMeasurementLines, 
+                                                                                            this._measurementLineColor, 
+                                                                                            this._measurementLabelSize, 
+                                                                                            this._measurementLabelColor,
+                                                                                            minValueY, 
+                                                                                            maxValueY);
         
         this._chartObject.add(this._baseMesh);
         if (this._measurementLines) this._chartObject.add(this._measurementLines);
 
-        const rowCollectionObject = this._seriesCollection.drawAllSeries(minChartRangeY, maxChartRangeY);
+        const rowCollectionObject = this._seriesCollection.drawAllSeries(this._width, this._height);
         rowCollectionObject.position.x += this._baseEdge;
         rowCollectionObject.position.z += this._baseEdge;
 
         this._chartObject.add(rowCollectionObject);
 
-        const rowLabelsCollectionObject = this._seriesCollection.drawSeriesLabels();
-        rowLabelsCollectionObject.position.z += this._baseEdge;
-        rowLabelsCollectionObject.position.x += (chartWidth+(this._baseEdge*2));
-
-        this._chartObject.add(rowLabelsCollectionObject);
-
-        const categoryLabelsCollectionObject = this._seriesCollection.drawCategoryLabels();
-        categoryLabelsCollectionObject.position.z += (chartLength+(this._baseEdge*2));
-        categoryLabelsCollectionObject.position.x += this._baseEdge;
-
-        this._chartObject.add(categoryLabelsCollectionObject);
-
-        const chartObjectArea = new Box3().setFromObject(this._chartObject);
+        /*const chartObjectArea = new Box3().setFromObject(this._chartObject);
 
         // position the object so it will view well
         const sizeX = chartObjectArea.max.x - chartObjectArea.min.x;
@@ -122,7 +143,7 @@ export class Chart {
 
         this._chartObject.position.x = ((sizeX/2)*-1);
         this._chartObject.position.y = ((sizeY/2)*-1);
-        this._chartObject.position.z = ((sizeZ/2)*-1);
+        this._chartObject.position.z = ((sizeZ/2)*-1);*/
     }
 
     public get seriesCollection(): SeriesCollection {
@@ -162,8 +183,8 @@ export class Chart {
                                     lineColor: Color, 
                                     labelSize: number, 
                                     labelColor: Color, 
-                                    minValue: number, 
-                                    maxValue: number): Object3D {
+                                    minY: number, 
+                                    maxY: number): Object3D {
         const measurementLineObject = new Object3D();
 
         const stepsEachLine = Math.ceil(chartHeight/numberOfMeasurementLines);
@@ -172,13 +193,13 @@ export class Chart {
             const measureLineGeometry = new BufferGeometry();
 
             measureLineGeometry.setAttribute( 'position', new BufferAttribute(new Float32Array([
-                (chartWidth/2)*-1, 
+                ((chartWidth/2)*-1), 
                 (stepsEachLine*i), 
                 (chartLength/2),
-                (chartWidth/2)*-1, 
+                ((chartWidth/2)*-1), 
                 (stepsEachLine*i), 
                 (chartLength/2)*-1,
-                (chartWidth/2), 
+                ((chartWidth/2)), 
                 (stepsEachLine*i), 
                 (chartLength/2)*-1
             ]), 3));
@@ -190,7 +211,7 @@ export class Chart {
 
             measurementLineObject.add(measureLine);
 
-            const textGeometry = new TextGeometry((minValue+Math.round((maxValue-minValue)/numberOfMeasurementLines)*i).toString(), {
+            const textGeometry = new TextGeometry((minY+Math.round((maxY-minY)/numberOfMeasurementLines)*i).toString(), {
                 font: this._font,
                 size: labelSize,
                 height: .2

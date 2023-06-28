@@ -1,5 +1,6 @@
 import { 
-    Color
+    Color, 
+    Scene
 } from 'three';
 
 import { Chart } from "../Chart";
@@ -24,8 +25,8 @@ export class BarChart extends Chart {
     private _categoryLabelSize: number = 4; // the font size for the col label
     private _categoryLabelColor: Color = new Color("#000000"); // the default color for the col label
     
-    constructor(data: Array<IBarSeriesData>, chartConfig?: IBarConfig) {
-        super(chartConfig);
+    constructor(scene: Scene, width: number, height: number, data: Array<IBarSeriesData>, chartConfig?: IBarConfig) {
+        super(scene, width, height, chartConfig);
         
         // Allow the override using the chartConfig options if they exist
         if (chartConfig !== undefined) {

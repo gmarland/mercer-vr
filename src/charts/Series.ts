@@ -50,5 +50,10 @@ export abstract class Series {
 
     public abstract get length(): number;
 
-    public abstract draw(graphMinX: number, graphMinY: number, graphMinZ: number): Object3D;
+    public abstract draw(graphMinX: number, 
+                        xScale: number, 
+                        graphMinY: number,
+                        yScale: number, 
+                        graphMinZ: number, 
+                        zScale: number): Object3D;
 }

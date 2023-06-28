@@ -1,10 +1,9 @@
 import { 
-    LineBasicMaterial,
     Object3D,
-    Line,
     Color,
     BufferGeometry,
-    BufferAttribute
+    BufferAttribute,
+    Mesh
 } from 'three';
 
 import { Series } from '../Series';
@@ -12,27 +11,29 @@ import { Series } from '../Series';
 import { LinePoint } from './LinePoint';
 import { ISeriesData } from '../../data/series/ISeriesData';
 
+const MeshLine = require('three.meshline').MeshLine;
+const MeshLineMaterial = require('three.meshline').MeshLineMaterial;
+
 export class LineSeries extends Series {
     private _linePoints: Array<LinePoint>;
-
-    private _barWidth: number;
-
-    private _pointSpace: number;
 
     private _color: Color;
 
     private _lineWidth: number;
 
-    constructor(index: number, seriesData: ISeriesData, color: Color, pointSpace: number, width: number) {
+    private _seriesSpace: number;
+
+    constructor(index: number, seriesData: ISeriesData, color: Color, width: number, seriesSpace: number) {
         super(index, seriesData);
 
         this._linePoints = new Array<LinePoint>();
 
         this._color = color;
 
-        this._pointSpace = pointSpace;
         this._color = color;
         this._lineWidth = width;
+
+        this._seriesSpace = seriesSpace;
     }
 
     // ----- Getters
@@ -107,11 +108,16 @@ export class LineSeries extends Series {
 
     // ----- Public Methods
 
-    addLinePoint(linePoint): void {
+    public addLinePoint(linePoint: LinePoint): void {
         this._linePoints.push(linePoint);
     }
 
-    draw(graphMinX: number, graphMinY: number, graphMinZ: number): Object3D {    
+    public draw(graphMinX: number, 
+                xScale: number, 
+                graphMinY: number,
+                yScale: number, 
+                graphMinZ: number, 
+                zScale: number): Object3D {    
         const lineObject = new Object3D();
 
         // Generate the outline
@@ -120,20 +126,22 @@ export class LineSeries extends Series {
         const points = new Array<number>();
 
         for (let i=0; i<this._linePoints.length; i++) {
-            points.push(this._linePoints[i].x);
-            points.push(this._linePoints[i].y-graphMinY);
-            points.push(this._lineWidth/2);
+            points.push((this._linePoints[i].x-graphMinX)/xScale);
+            points.push((this._linePoints[i].y-graphMinY)/yScale);
+            points.push((this.index*this._seriesSpace) + (this._lineWidth/2));
         }
         
         lineGeometry.setAttribute( 'position', new BufferAttribute(new Float32Array(points), 3));
+        
+        const meshLine = new MeshLine();
+        meshLine.setGeometry(lineGeometry);
 
-        const areaLine = new Line(lineGeometry, new LineBasicMaterial({
-            color: this._color
+        const line = new Mesh(meshLine, new MeshLineMaterial({
+            color: this._color,
+            lineWidth: this._lineWidth
         }));
 
-        lineObject.add(areaLine);
-
-        lineObject.position.x -= graphMinX;
+        lineObject.add(line);
 
         return lineObject;
     };

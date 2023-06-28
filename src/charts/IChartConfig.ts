@@ -16,5 +16,4 @@ export interface IChartConfig {
     measurementLabelSize?: number;
 
     measurementLabelColor?: string;
-
 }

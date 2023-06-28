@@ -1,5 +1,6 @@
 import { 
-    Color
+    Color, 
+    Scene
 } from 'three';
 
 import { Chart } from "../Chart";
@@ -12,8 +13,8 @@ import { IScatterConfig } from './IScatterConfig';
 export class ScatterChart extends Chart {
     private pointSize: number = 6; // the space between each category in a row
 
-    constructor(data: Array<IScatterSeriesData>, chartConfig?: IScatterConfig) {
-        super(chartConfig);
+    constructor(scene: Scene, width: number, height: number, data: Array<IScatterSeriesData>, chartConfig?: IScatterConfig) {
+        super(scene, width, height, chartConfig);
 
         if (chartConfig) {
             if (chartConfig.pointSize) this.pointSize = chartConfig.pointSize;

@@ -5,7 +5,12 @@
     "module": "es6",
     "target": "es5",
     "allowJs": true,
-    "moduleResolution":"node"
+    "moduleResolution":"node",
+    "baseUrl": "./",
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@custom_types"
+    ]
   },
   "files": ["src/index.ts"]
 }

@@ -8,6 +8,4 @@ export interface ILineConfig extends IChartConfig {
     seriesLabelSize?: number;
 
     seriesLabelColor?: string;
-
-    pointSpace?: number;
 }

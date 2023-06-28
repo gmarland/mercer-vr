@@ -1,5 +1,6 @@
 import { 
-    Color
+    Color, 
+    Scene
 } from 'three';
 
 import { Chart } from "../Chart";
@@ -16,19 +17,18 @@ import { SeriesLabel } from '../../labels/SeriesLabel';
 
 export class AreaChart extends Chart {
     private _areaWidth: number = 4; // the width of the area graph
-    private _seriesSpace: number = 30; // the space between each row
     private _seriesLabelSize: number = 4; // the font size for the row label
     private _seriesLabelColor: Color = new Color("#000000"); // the default color for the row label
     private _pointSpace: number = 5; // the space between each category in a row
 
-    constructor(data: Array<IAreaSeriesData>, chartConfig?: IAreaChartConfig) {
-        super(chartConfig);
+    constructor(scene: Scene, width: number, height: number, data: Array<IAreaSeriesData>, chartConfig?: IAreaChartConfig) {
+        super(scene, width, height, chartConfig);
 
         // Allow the override using the graphData options if they exist
         if (chartConfig !== undefined) {
             if (chartConfig.areaWidth !== undefined) this._areaWidth = chartConfig.areaWidth;
             
-            if (chartConfig.seriesSpace !== undefined) this._seriesSpace = chartConfig.seriesSpace;
+            if (chartConfig.seriesSpace !== undefined) this.seriesSpace = chartConfig.seriesSpace;
 
             if (chartConfig.seriesLabelSize !== undefined) this._seriesLabelSize = chartConfig.seriesLabelSize;
 
@@ -41,7 +41,7 @@ export class AreaChart extends Chart {
     }
      
     private buildSeries(data: Array<IAreaSeriesData>): void {
-        this.seriesCollection = new SeriesCollection(this._seriesSpace);
+        this.seriesCollection = new SeriesCollection();
 
         // check that we've have some data passed in
         if (data) {
@@ -66,7 +66,7 @@ export class AreaChart extends Chart {
                 this.seriesCollection.addSeries(series);
 
                 if (data[i].name) {
-                    const seriesLabel = new SeriesLabel(i, this._seriesSpace, this._areaWidth, this.font, this._seriesLabelSize, this._seriesLabelColor, data[i].name);
+                    const seriesLabel = new SeriesLabel(i, this.seriesSpace, this._areaWidth, this.font, this._seriesLabelSize, this._seriesLabelColor, data[i].name);
 
                     this.seriesCollection.addSeriesLabel(seriesLabel);
                 }
